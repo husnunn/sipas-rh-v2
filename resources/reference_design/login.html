@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Login - Robithotul Hikmah</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#d9dadb",
+                        "tertiary-container": "#cca72f",
+                        "outline-variant": "#bfc9c3",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-surface": "#191c1d",
+                        "surface-bright": "#f8f9fa",
+                        "primary": "#003527",
+                        "tertiary-fixed": "#ffe088",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#b0f0d6",
+                        "surface": "#f8f9fa",
+                        "on-surface-variant": "#404944",
+                        "surface-container-highest": "#e1e3e4",
+                        "inverse-primary": "#95d3ba",
+                        "on-secondary-container": "#446a5e",
+                        "surface-variant": "#e1e3e4",
+                        "on-primary-fixed": "#002117",
+                        "inverse-surface": "#2e3132",
+                        "primary-container": "#064e3b",
+                        "on-tertiary-container": "#4e3d00",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#80bea6",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#bfe9d9",
+                        "secondary-fixed": "#c2ebdc",
+                        "background": "#f8f9fa",
+                        "surface-tint": "#2b6954",
+                        "primary-fixed-dim": "#95d3ba",
+                        "outline": "#707974",
+                        "on-secondary-fixed": "#002018",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#a7cfc0",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary": "#735c00",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c1d",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#406659",
+                        "surface-container-low": "#f3f4f5",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "on-secondary-fixed-variant": "#284e42",
+                        "on-tertiary-fixed-variant": "#574500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "260px",
+                        "gutter": "16px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px",
+                        "container-padding": "24px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter", "sans-serif"],
+                        "h2": ["Inter", "sans-serif"],
+                        "h3": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "table-header": ["Inter", "sans-serif"],
+                        "h1": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h2": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h3": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "table-header": ["13px", { "lineHeight": "18px", "fontWeight": "600" }],
+                        "h1": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-background min-h-screen flex flex-col justify-center items-center p-stack-lg relative overflow-hidden">
+    <!-- Decorative Ambient Background Elements -->
+    <div
+        class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary-container opacity-[0.03] rounded-full blur-[100px] pointer-events-none">
+    </div>
+    <div
+        class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary-container opacity-[0.04] rounded-full blur-[120px] pointer-events-none">
+    </div>
+    <!-- Main Content Container -->
+    <main class="w-full max-w-[420px] z-10">
+        <!-- Login Card -->
+        <div
+            class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant/50 p-container-padding flex flex-col gap-stack-lg relative overflow-hidden">
+            <!-- Subtle top accent line -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
+            <!-- Header Section -->
+            <div class="text-center flex flex-col items-center gap-stack-sm mt-stack-sm">
+                <!-- Logo -->
+                <div
+                    class="w-14 h-14 bg-surface-container-low border border-surface-variant rounded-xl flex items-center justify-center text-primary mb-2 shadow-sm">
+                    <img alt="Robithotul Hikmah Logo" class="w-8 h-8 object-contain mix-blend-multiply opacity-90"
+                        data-alt="Minimalist geometric green academic logo on clean background"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp7aCgiI7Z9gHiATLXRUUdAQiYRyL4bnJtAfy6ET-Sny1Wo-a_OftMqxTMt9sC6tXSRHIMQzuAAXc0zl2OUqhkm_Rheut23c24SZSuQGWMdKdEtd0kyKC3aTy1IxY9Zq98NELpiqIylxZVk1Z86cIWYr-lXpBfVbmoXDoSPaMzBwWzal8AI2ZXetxIFNz25P_FUGqPFsJOCYTJgdBb_ET-FWLsYYATYeMGGeO6Dvz9duh8z4O1JjxHYyCzRNIu4lOjSRWn0uPgaVg" />
+                </div>
+                <h1 class="text-h2 font-h2 text-on-surface">Admin Portal</h1>
+                <p class="text-body-md font-body-md text-on-surface-variant">Sign in to manage academic operations.</p>
+            </div>
+            <!-- Login Form -->
+            <form class="flex flex-col gap-stack-md mt-2">
+                <!-- Username/Email Input Group -->
+                <div class="flex flex-col gap-unit">
+                    <label class="text-label-sm font-label-sm text-on-surface" for="identifier">Username or
+                        Email</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-[18px] text-outline">mail</span>
+                        </div>
+                        <input
+                            class="w-full h-[44px] pl-10 pr-4 rounded-xl border border-outline-variant bg-surface-container-lowest text-body-md font-body-md text-on-surface placeholder:text-outline/70 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                            id="identifier" name="identifier" placeholder="admin@rhschool.edu" required=""
+                            type="text" />
+                    </div>
+                </div>
+                <!-- Password Input Group -->
+                <div class="flex flex-col gap-unit">
+                    <div class="flex justify-between items-center">
+                        <label class="text-label-sm font-label-sm text-on-surface" for="password">Password</label>
+                        <a class="text-label-sm font-label-sm text-primary hover:text-primary-container transition-colors"
+                            href="#">Forgot?</a>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-[18px] text-outline">lock</span>
+                        </div>
+                        <input
+                            class="w-full h-[44px] pl-10 pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest text-body-md font-body-md text-on-surface placeholder:text-outline/70 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                            id="password" name="password" placeholder="••••••••" required="" type="password" />
+                        <button aria-label="Toggle password visibility"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface transition-colors focus:outline-none"
+                            type="button">
+                            <span class="material-symbols-outlined text-[20px]">visibility_off</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Action Button -->
+                <button
+                    class="mt-stack-sm w-full h-[44px] bg-primary text-on-primary rounded-xl text-body-md font-body-md font-semibold hover:bg-primary-container focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface-container-lowest focus:ring-primary transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_2px_4px_rgba(0,53,39,0.15)] hover:shadow-[0_4px_8px_rgba(0,53,39,0.2)]"
+                    type="submit">
+                    <span>Login to Dashboard</span>
+                    <span class="material-symbols-outlined text-[18px]"
+                        style="font-variation-settings: 'wght' 600;">arrow_forward</span>
+                </button>
+            </form>
+            <!-- Optional Security Indicator -->
+            <div class="flex items-center justify-center gap-2 mt-2 text-outline text-[11px] font-body-md">
+                <span class="material-symbols-outlined text-[14px]">lock_person</span>
+                <span>Secure SSL Encrypted Connection</span>
+            </div>
+        </div>
+    </main>
+    <!-- Subtle Footer -->
+    <footer class="mt-stack-lg text-center z-10 flex flex-col gap-1 text-outline">
+        <p class="text-body-md font-body-md">© 2024 Robithotul Hikmah Jombang.</p>
+        <p class="text-[12px] font-body-md opacity-80">Academic Administration System v2.1</p>
+    </footer>
+</body>
+
+</html>

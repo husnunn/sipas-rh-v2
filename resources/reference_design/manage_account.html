@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Accounts - Robithotul Hikmah</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#735c00",
+                        "surface-dim": "#d9dadb",
+                        "on-primary-container": "#80bea6",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-surface": "#191c1d",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#95d3ba",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#c2ebdc",
+                        "on-surface-variant": "#404944",
+                        "surface-container-low": "#f3f4f5",
+                        "surface": "#f8f9fa",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#a7cfc0",
+                        "on-tertiary-container": "#4e3d00",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "surface-variant": "#e1e3e4",
+                        "primary-container": "#064e3b",
+                        "secondary-container": "#bfe9d9",
+                        "outline-variant": "#bfc9c3",
+                        "secondary": "#406659",
+                        "inverse-surface": "#2e3132",
+                        "outline": "#707974",
+                        "on-secondary-fixed": "#002018",
+                        "surface-container": "#edeeef",
+                        "on-background": "#191c1d",
+                        "surface-container-high": "#e7e8e9",
+                        "primary-fixed": "#b0f0d6",
+                        "error-container": "#ffdad6",
+                        "primary": "#003527",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#284e42",
+                        "tertiary-fixed": "#ffe088",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#cca72f",
+                        "on-secondary-container": "#446a5e",
+                        "surface-bright": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "inverse-on-surface": "#f0f1f2",
+                        "background": "#f8f9fa",
+                        "primary-fixed-dim": "#95d3ba",
+                        "surface-tint": "#2b6954",
+                        "on-primary-fixed": "#002117"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-sm": "8px",
+                        "sidebar-width": "260px",
+                        "gutter": "16px",
+                        "stack-md": "16px",
+                        "stack-lg": "24px",
+                        "container-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Inter"],
+                        "table-header": ["Inter"],
+                        "h3": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h1": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "table-header": ["13px", { "lineHeight": "18px", "fontWeight": "600" }],
+                        "h3": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h1": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            background-color: #F3F4F6;
+        }
+    </style>
+</head>
+
+<body class="font-body-md text-body-md text-on-background antialiased flex h-screen overflow-hidden">
+    <!-- SideNavBar -->
+    <nav
+        class="bg-[#022C22] fixed left-0 top-0 h-full w-[260px] overflow-y-auto border-r border-emerald-900 shadow-xl flex flex-col h-full py-4 z-50">
+        <div class="px-4 py-6 mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-white"
+                        style="font-variation-settings: 'FILL' 1;">account_balance</span>
+                </div>
+                <div>
+                    <h1 class="text-white font-bold text-xl tracking-tight leading-tight">Robithotul Hikmah</h1>
+                    <span class="text-emerald-500 font-inter text-[14px] font-medium block">Jombang</span>
+                </div>
+            </div>
+        </div>
+        <button
+            class="mx-4 mb-6 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg py-2.5 px-4 font-semibold text-sm flex items-center justify-center gap-2 transition-colors shadow-sm">
+            <span class="material-symbols-outlined text-[20px]">add</span>
+            New Entry
+        </button>
+        <ul class="flex flex-col flex-1 space-y-1 px-2 font-inter text-[14px] font-medium">
+            <li>
+                <a class="text-gray-400 hover:text-white py-3 px-4 flex items-center gap-3 hover:bg-emerald-900/30 transition-all duration-200 rounded-lg"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a class="text-gray-400 hover:text-white py-3 px-4 flex items-center gap-3 hover:bg-emerald-900/30 transition-all duration-200 rounded-lg"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">person</span>
+                    Students
+                </a>
+            </li>
+            <li>
+                <a class="text-gray-400 hover:text-white py-3 px-4 flex items-center gap-3 hover:bg-emerald-900/30 transition-all duration-200 rounded-lg"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">school</span>
+                    Teachers
+                </a>
+            </li>
+            <li>
+                <a class="text-gray-400 hover:text-white py-3 px-4 flex items-center gap-3 hover:bg-emerald-900/30 transition-all duration-200 rounded-lg"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">groups</span>
+                    Classes
+                </a>
+            </li>
+            <li>
+                <a class="text-gray-400 hover:text-white py-3 px-4 flex items-center gap-3 hover:bg-emerald-900/30 transition-all duration-200 rounded-lg"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">menu_book</span>
+                    Subjects
+                </a>
+            </li>
+            <li>
+                <a class="text-gray-400 hover:text-white py-3 px-4 flex items-center gap-3 hover:bg-emerald-900/30 transition-all duration-200 rounded-lg"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+                    Schedules
+                </a>
+            </li>
+            <li>
+                <a class="text-white bg-emerald-800/50 border-l-4 border-emerald-500 py-3 px-4 flex items-center gap-3 rounded-r-lg"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]"
+                        style="font-variation-settings: 'FILL' 1;">manage_accounts</span>
+                    Accounts
+                </a>
+            </li>
+            <li>
+                <a class="text-gray-400 hover:text-white py-3 px-4 flex items-center gap-3 hover:bg-emerald-900/30 transition-all duration-200 rounded-lg"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">settings</span>
+                    Settings
+                </a>
+            </li>
+        </ul>
+        <div class="mt-auto px-6 py-4">
+            <div class="text-xs text-emerald-700 font-medium">v2.4.1 Admin Portal</div>
+        </div>
+    </nav>
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col ml-[260px] h-full overflow-hidden bg-background">
+        <!-- TopAppBar -->
+        <header
+            class="bg-white dark:bg-gray-900 sticky top-0 w-full z-40 border-b border-gray-200 dark:border-gray-800 shadow-sm flex items-center justify-between px-6 py-3 font-inter text-sm antialiased">
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+                    <input
+                        class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 text-on-surface placeholder-gray-500"
+                        placeholder="Search accounts..." type="text" />
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-emerald-800 dark:text-emerald-400">
+                <button
+                    class="p-2 rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400 relative">
+                    <span class="material-symbols-outlined text-[24px]">notifications</span>
+                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+                </button>
+                <button
+                    class="p-2 rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400">
+                    <span class="material-symbols-outlined text-[24px]">help</span>
+                </button>
+                <button
+                    class="p-2 rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400">
+                    <span class="material-symbols-outlined text-[24px]">apps</span>
+                </button>
+                <div
+                    class="ml-4 h-8 w-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant cursor-pointer">
+                    <img alt="Admin User Profile" class="w-full h-full object-cover"
+                        data-alt="professional portrait of admin user with subtle lighting"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcHJbSuOdgz9yAGm4_jDn64qWYqP42EWFrmKw0M-GUWWS6My3EcF929f4C4SuKVdBjBl7brozsMHWLOfvhDP7UUxvudAgyTfRgkM27VYScoGIY5MYGuTvUwFW27vUFb0VeiYrBRp-enVinGWJqID_jCee5gmCoEx51Zn0WgC7maWfnwW0vlG2WLl65nBZIC8VLs-ab0Dm2k_-AxkNDa6Xg4Wg2nMbpARgRJHclrRjDrF0cX2xolJQ_5CTZ2BNk6Jq3oNCipfCfyIM" />
+                </div>
+            </div>
+        </header>
+        <!-- Canvas -->
+        <main class="flex-1 overflow-y-auto p-container-padding">
+            <div class="max-w-7xl mx-auto space-y-stack-lg">
+                <!-- Page Header -->
+                <div class="flex items-end justify-between">
+                    <div>
+                        <h2 class="font-h1 text-h1 text-on-surface">Accounts Management</h2>
+                        <p class="font-body-md text-body-md text-on-surface-variant mt-1">Manage portal access,
+                            security, and credentials for all users.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button
+                            class="bg-surface-container-lowest text-primary border border-primary hover:bg-surface-container-low px-4 py-2 rounded-lg font-label-sm text-label-sm transition-colors shadow-sm flex items-center gap-2 uppercase">
+                            <span class="material-symbols-outlined text-[18px]">download</span>
+                            Export List
+                        </button>
+                        <button
+                            class="bg-primary text-on-primary hover:bg-primary-container px-4 py-2 rounded-lg font-label-sm text-label-sm transition-colors shadow-sm flex items-center gap-2 uppercase">
+                            <span class="material-symbols-outlined text-[18px]">person_add</span>
+                            Create Account
+                        </button>
+                    </div>
+                </div>
+                <!-- Metrics Bento -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+                    <div
+                        class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-surface-container-highest">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p
+                                    class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">
+                                    Total Accounts</p>
+                                <h3 class="font-h1 text-h1 text-on-surface">1,248</h3>
+                            </div>
+                            <div class="p-2 bg-secondary-container text-on-secondary-container rounded-lg">
+                                <span class="material-symbols-outlined">group</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-surface-container-highest">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p
+                                    class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">
+                                    Teachers</p>
+                                <h3 class="font-h1 text-h1 text-on-surface">142</h3>
+                            </div>
+                            <div class="p-2 bg-primary-fixed text-on-primary-fixed rounded-lg">
+                                <span class="material-symbols-outlined">school</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-surface-container-highest">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p
+                                    class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">
+                                    Students</p>
+                                <h3 class="font-h1 text-h1 text-on-surface">1,106</h3>
+                            </div>
+                            <div class="p-2 bg-tertiary-fixed text-on-tertiary-fixed rounded-lg">
+                                <span class="material-symbols-outlined">person</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-error-container relative overflow-hidden">
+                        <div class="absolute right-0 top-0 w-16 h-16 bg-error/5 rounded-bl-full"></div>
+                        <div class="flex justify-between items-start relative z-10">
+                            <div>
+                                <p class="font-label-sm text-label-sm text-error uppercase tracking-wider mb-1">Locked
+                                    Accounts</p>
+                                <h3 class="font-h1 text-h1 text-error">7</h3>
+                            </div>
+                            <div class="p-2 bg-error-container text-on-error-container rounded-lg">
+                                <span class="material-symbols-outlined">lock_person</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Filters & Table Section -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-surface-container-highest flex flex-col">
+                    <!-- Toolbar -->
+                    <div
+                        class="p-4 border-b border-surface-variant flex items-center justify-between bg-surface-bright rounded-t-xl">
+                        <div class="flex gap-2">
+                            <select
+                                class="bg-white border border-outline-variant text-on-surface text-sm rounded-lg focus:ring-primary focus:border-primary block p-2">
+                                <option>All Account Types</option>
+                                <option>Teacher</option>
+                                <option>Student</option>
+                                <option>Admin</option>
+                            </select>
+                            <select
+                                class="bg-white border border-outline-variant text-on-surface text-sm rounded-lg focus:ring-primary focus:border-primary block p-2">
+                                <option>All Statuses</option>
+                                <option>Active</option>
+                                <option>Locked</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="p-2 text-outline hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors"
+                                title="Filter options">
+                                <span class="material-symbols-outlined text-[20px]">tune</span>
+                            </button>
+                            <button
+                                class="p-2 text-outline hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors"
+                                title="Refresh data">
+                                <span class="material-symbols-outlined text-[20px]">refresh</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Data Table -->
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-surface-container-low border-b border-surface-variant">
+                                    <th
+                                        class="p-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider w-12">
+                                        <input class="rounded border-outline-variant text-primary focus:ring-primary"
+                                            type="checkbox" />
+                                    </th>
+                                    <th
+                                        class="p-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">
+                                        User / Identifier</th>
+                                    <th
+                                        class="p-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">
+                                        Type</th>
+                                    <th
+                                        class="p-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">
+                                        Security</th>
+                                    <th
+                                        class="p-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">
+                                        Last Login</th>
+                                    <th
+                                        class="p-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">
+                                        Status</th>
+                                    <th
+                                        class="p-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider text-right">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font-body-md text-body-md text-on-surface">
+                                <!-- Row 1 -->
+                                <tr
+                                    class="border-b border-surface-variant hover:bg-surface-bright transition-colors bg-white">
+                                    <td class="p-4"><input
+                                            class="rounded border-outline-variant text-primary focus:ring-primary"
+                                            type="checkbox" /></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs">
+                                                AH</div>
+                                            <div>
+                                                <div class="font-medium text-on-surface">Ahmad Hassan</div>
+                                                <div class="text-xs text-outline font-mono">TCH-2023-041</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-container/10 text-primary-container">Teacher</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1 text-on-surface-variant">
+                                            <span class="material-symbols-outlined text-[16px] text-primary"
+                                                title="2FA Enabled">verified_user</span>
+                                            <span class="text-xs">2FA On</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-on-surface-variant text-sm">Today, 08:14 AM</td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span> Active
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button
+                                                class="p-1.5 text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                title="Reset Password">
+                                                <span class="material-symbols-outlined text-[18px]">key</span>
+                                            </button>
+                                            <button
+                                                class="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors"
+                                                title="More Options">
+                                                <span class="material-symbols-outlined text-[18px]">more_vert</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Row 2 (Locked) -->
+                                <tr
+                                    class="border-b border-error-container hover:bg-error-container/20 transition-colors bg-[#fef2f2]">
+                                    <td class="p-4"><input
+                                            class="rounded border-outline-variant text-primary focus:ring-primary"
+                                            type="checkbox" /></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-error-container text-on-error-container flex items-center justify-center font-bold text-xs">
+                                                FZ</div>
+                                            <div>
+                                                <div class="font-medium text-on-surface">Fatima Zahra</div>
+                                                <div class="text-xs text-outline font-mono">STD-2024-892</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-tertiary-container/10 text-on-tertiary-container">Student</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1 text-error text-xs font-medium">
+                                            <span class="material-symbols-outlined text-[16px]">warning</span>
+                                            Failed login x5
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-on-surface-variant text-sm">Yesterday, 11:30 PM</td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-error-container text-on-error-container border border-error/20">
+                                            <span class="material-symbols-outlined text-[12px]">lock</span> Locked
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button
+                                                class="bg-surface-container-lowest border border-error text-error hover:bg-error-container px-2 py-1 rounded text-xs font-medium transition-colors">
+                                                Unlock Account
+                                            </button>
+                                            <button
+                                                class="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors"
+                                                title="More Options">
+                                                <span class="material-symbols-outlined text-[18px]">more_vert</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Row 3 -->
+                                <tr
+                                    class="border-b border-surface-variant hover:bg-surface-bright transition-colors bg-white">
+                                    <td class="p-4"><input
+                                            class="rounded border-outline-variant text-primary focus:ring-primary"
+                                            type="checkbox" /></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold text-xs">
+                                                YK</div>
+                                            <div>
+                                                <div class="font-medium text-on-surface">Yusuf Karim</div>
+                                                <div class="text-xs text-outline font-mono">STD-2023-115</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-tertiary-container/10 text-on-tertiary-container">Student</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1 text-on-surface-variant">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-outline">gpp_maybe</span>
+                                            <span class="text-xs text-outline">Standard</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-on-surface-variant text-sm">Oct 12, 2023</td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span> Active
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button
+                                                class="p-1.5 text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                title="Reset Password">
+                                                <span class="material-symbols-outlined text-[18px]">key</span>
+                                            </button>
+                                            <button
+                                                class="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors"
+                                                title="More Options">
+                                                <span class="material-symbols-outlined text-[18px]">more_vert</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Row 4 -->
+                                <tr class="hover:bg-surface-bright transition-colors bg-[#F9FAFB]">
+                                    <td class="p-4"><input
+                                            class="rounded border-outline-variant text-primary focus:ring-primary"
+                                            type="checkbox" /></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs">
+                                                MA</div>
+                                            <div>
+                                                <div class="font-medium text-on-surface">Maryam Ali</div>
+                                                <div class="text-xs text-outline font-mono">TCH-2021-008</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-container/10 text-primary-container">Teacher</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1 text-on-surface-variant">
+                                            <span class="material-symbols-outlined text-[16px] text-primary"
+                                                title="2FA Enabled">verified_user</span>
+                                            <span class="text-xs">2FA On</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-on-surface-variant text-sm">Today, 07:45 AM</td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span> Active
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button
+                                                class="p-1.5 text-outline hover:text-primary hover:bg-surface-container rounded transition-colors"
+                                                title="Reset Password">
+                                                <span class="material-symbols-outlined text-[18px]">key</span>
+                                            </button>
+                                            <button
+                                                class="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors"
+                                                title="More Options">
+                                                <span class="material-symbols-outlined text-[18px]">more_vert</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination -->
+                    <div
+                        class="p-4 border-t border-surface-variant flex items-center justify-between bg-surface-bright rounded-b-xl">
+                        <span class="text-sm text-on-surface-variant font-body-md">Showing 1 to 10 of 1,248
+                            accounts</span>
+                        <div class="flex gap-1">
+                            <button
+                                class="px-3 py-1 border border-outline-variant rounded bg-white text-on-surface-variant disabled:opacity-50 text-sm hover:bg-surface-container transition-colors"
+                                disabled="">Previous</button>
+                            <button
+                                class="px-3 py-1 border border-primary bg-primary text-on-primary rounded text-sm font-medium">1</button>
+                            <button
+                                class="px-3 py-1 border border-outline-variant bg-white text-on-surface hover:bg-surface-container rounded text-sm transition-colors">2</button>
+                            <button
+                                class="px-3 py-1 border border-outline-variant bg-white text-on-surface hover:bg-surface-container rounded text-sm transition-colors">3</button>
+                            <span class="px-2 py-1 text-on-surface-variant">...</span>
+                            <button
+                                class="px-3 py-1 border border-outline-variant rounded bg-white text-on-surface text-sm hover:bg-surface-container transition-colors">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

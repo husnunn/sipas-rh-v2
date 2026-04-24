@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Dashboard - Robithotul Hikmah</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#d9dadb",
+                        "tertiary-container": "#cca72f",
+                        "outline-variant": "#bfc9c3",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-surface": "#191c1d",
+                        "surface-bright": "#f8f9fa",
+                        "primary": "#003527",
+                        "tertiary-fixed": "#ffe088",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#b0f0d6",
+                        "surface": "#f8f9fa",
+                        "on-surface-variant": "#404944",
+                        "surface-container-highest": "#e1e3e4",
+                        "inverse-primary": "#95d3ba",
+                        "on-secondary-container": "#446a5e",
+                        "surface-variant": "#e1e3e4",
+                        "on-primary-fixed": "#002117",
+                        "inverse-surface": "#2e3132",
+                        "primary-container": "#064e3b",
+                        "on-tertiary-container": "#4e3d00",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#80bea6",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#bfe9d9",
+                        "secondary-fixed": "#c2ebdc",
+                        "background": "#f8f9fa",
+                        "surface-tint": "#2b6954",
+                        "primary-fixed-dim": "#95d3ba",
+                        "outline": "#707974",
+                        "on-secondary-fixed": "#002018",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#a7cfc0",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary": "#735c00",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c1d",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#406659",
+                        "surface-container-low": "#f3f4f5",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "on-secondary-fixed-variant": "#284e42",
+                        "on-tertiary-fixed-variant": "#574500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "260px",
+                        "gutter": "16px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "stack-sm": "8px",
+                        "container-padding": "24px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": [
+                            "Inter"
+                        ],
+                        "h2": [
+                            "Inter"
+                        ],
+                        "h3": [
+                            "Inter"
+                        ],
+                        "label-sm": [
+                            "Inter"
+                        ],
+                        "body-lg": [
+                            "Inter"
+                        ],
+                        "table-header": [
+                            "Inter"
+                        ],
+                        "h1": [
+                            "Inter"
+                        ]
+                    },
+                    "fontSize": {
+                        "body-md": [
+                            "14px",
+                            {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "h2": [
+                            "24px",
+                            {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "h3": [
+                            "20px",
+                            {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "label-sm": [
+                            "12px",
+                            {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "body-lg": [
+                            "16px",
+                            {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "table-header": [
+                            "13px",
+                            {
+                                "lineHeight": "18px",
+                                "fontWeight": "600"
+                            }
+                        ],
+                        "h1": [
+                            "30px",
+                            {
+                                "lineHeight": "38px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                            }
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+    <!-- SideNavBar (From JSON) -->
+    <nav
+        class="bg-emerald-950 dark:bg-black fixed left-0 top-0 h-screen w-[260px] z-50 border-r border-emerald-900/50 shadow-xl flex flex-col h-full py-6">
+        <!-- Header -->
+        <div class="px-6 mb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                    <img alt="Robithotul Hikmah Logo" class="w-8 h-8 rounded-full object-cover"
+                        data-alt="minimalist abstract geometric logo with green tones representing growth and education"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUuIlGqGOdlrvgN6e36EOiXpKfApLFGHVRyhk5UWo10_7r1ZVdhiC1yFTwX_8PiRD2Afz4Es5QuIvzfwesQqNIJpHf8Wbhc3wKMRUbQmjn3n40EVXyR0yKDTlp-EXtS5og9bLGfH-jSrmEdPOXEhwU8c2-HzAtVDFMK3YpMvJ_L9CQRzekdv19iz14ZqT-tGz7l-dmvCWz0fbh7XpuptbKb0AXpueoYZx_nfiUgtJ4Sc7dyskMAViMlItbugLrJumWJ9xm_igjFrs" />
+                </div>
+                <div>
+                    <h1 class="text-lg font-black text-white tracking-tight">Robithotul Hikmah</h1>
+                    <p class="text-emerald-500 dark:text-emerald-400 font-['Inter'] text-sm font-medium tracking-wide">
+                        Admin Portal</p>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation Links -->
+        <div class="flex-1 overflow-y-auto space-y-1">
+            <a class="flex items-center gap-3 bg-emerald-800/40 text-white border-l-4 border-emerald-500 px-6 py-3 transition-all Active: opacity-90 scale-[0.99] font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Dashboard
+            </a>
+            <a class="flex items-center gap-3 text-emerald-100/70 hover:bg-emerald-900/30 hover:text-white px-6 py-3 transition-all hover:bg-emerald-900/50 transition-colors duration-200 font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined">school</span>
+                Students
+            </a>
+            <a class="flex items-center gap-3 text-emerald-100/70 hover:bg-emerald-900/30 hover:text-white px-6 py-3 transition-all hover:bg-emerald-900/50 transition-colors duration-200 font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined">group</span>
+                Teachers
+            </a>
+            <a class="flex items-center gap-3 text-emerald-100/70 hover:bg-emerald-900/30 hover:text-white px-6 py-3 transition-all hover:bg-emerald-900/50 transition-colors duration-200 font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined">domain</span>
+                Classes
+            </a>
+            <a class="flex items-center gap-3 text-emerald-100/70 hover:bg-emerald-900/30 hover:text-white px-6 py-3 transition-all hover:bg-emerald-900/50 transition-colors duration-200 font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined">book</span>
+                Subjects
+            </a>
+            <a class="flex items-center gap-3 text-emerald-100/70 hover:bg-emerald-900/30 hover:text-white px-6 py-3 transition-all hover:bg-emerald-900/50 transition-colors duration-200 font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined">calendar_month</span>
+                Schedules
+            </a>
+            <a class="flex items-center gap-3 text-emerald-100/70 hover:bg-emerald-900/30 hover:text-white px-6 py-3 transition-all hover:bg-emerald-900/50 transition-colors duration-200 font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined">manage_accounts</span>
+                Accounts
+            </a>
+            <a class="flex items-center gap-3 text-emerald-100/70 hover:bg-emerald-900/30 hover:text-white px-6 py-3 transition-all hover:bg-emerald-900/50 transition-colors duration-200 font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+        </div>
+        <!-- Footer / CTA -->
+        <div class="mt-auto px-6 pt-6 border-t border-emerald-900/50 space-y-2">
+            <a class="flex items-center gap-3 text-emerald-100/70 hover:bg-emerald-900/30 hover:text-white px-6 py-3 -mx-6 transition-all hover:bg-emerald-900/50 transition-colors duration-200 font-['Inter'] text-sm font-medium tracking-wide"
+                href="#">
+                <span class="material-symbols-outlined">help</span>
+                Help Center
+            </a>
+            <button
+                class="w-full flex items-center justify-center gap-2 bg-emerald-800/30 hover:bg-emerald-800/50 text-white px-4 py-2 rounded-lg transition-colors font-['Inter'] text-sm font-medium tracking-wide">
+                <span class="material-symbols-outlined text-sm">logout</span>
+                System Logout
+            </button>
+        </div>
+    </nav>
+    <!-- Main Content Canvas -->
+    <div class="flex-1 ml-[260px] flex flex-col min-h-screen">
+        <!-- TopNavBar (From JSON) -->
+        <header
+            class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 right-0 w-full z-40 border-b border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center h-16 px-8">
+            <div class="flex items-center gap-6">
+                <div class="text-emerald-900 dark:text-emerald-100 font-bold font-['Inter'] text-sm">Academic
+                    Administration</div>
+                <!-- Search (on_left configuration) -->
+                <div class="relative w-64 hidden lg:block">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+                    <input
+                        class="w-full bg-surface-container-low border border-outline-variant text-on-surface rounded-lg pl-9 pr-4 py-1.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-['Inter'] text-sm transition-all focus:border-emerald-500 focus:bg-white placeholder:text-slate-500"
+                        placeholder="Search system..." type="text" />
+                </div>
+            </div>
+            <!-- Nav Links (Center) -->
+            <div class="hidden md:flex items-center gap-1 h-full">
+                <a class="text-emerald-700 dark:text-emerald-400 border-b-2 border-emerald-600 pb-1 h-full flex items-center px-4 font-['Inter'] text-sm font-semibold"
+                    href="#">Academic</a>
+                <a class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 transition-colors h-full flex items-center px-4 font-['Inter'] text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md"
+                    href="#">Personnel</a>
+                <a class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 transition-colors h-full flex items-center px-4 font-['Inter'] text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md"
+                    href="#">System</a>
+            </div>
+            <!-- Trailing Actions -->
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex gap-2">
+                    <button
+                        class="bg-white border border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-4 py-1.5 rounded-lg font-['Inter'] text-sm font-semibold transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none">Export</button>
+                    <button
+                        class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-1.5 rounded-lg font-['Inter'] text-sm font-semibold transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none shadow-sm">Add
+                        New</button>
+                </div>
+                <div class="flex items-center gap-1 border-l border-slate-200 pl-4 ml-2">
+                    <button
+                        class="p-2 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-full transition-colors relative">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+                    </button>
+                    <button
+                        class="p-2 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-full transition-colors hidden sm:block">
+                        <span class="material-symbols-outlined">history</span>
+                    </button>
+                    <button
+                        class="p-1 rounded-full border-2 border-transparent hover:border-emerald-200 transition-all ml-2">
+                        <img alt="Admin Profile" class="w-8 h-8 rounded-full object-cover"
+                            data-alt="professional headshot of a male administrative executive in a modern office setting"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHxGrrhAq2Gw6f_Ikf4kQlhng49G1opD3t88IxvlZNxfn2bN2rUF7BtHXwnAFEWmvZjs8okHF5BJ36m13F7Eh1u1uxqsYCUvjCw-_hig_E6b58b5X50WydZ8bf-uaJyk0bmgkydLvAO8y_G3IIXwwWXetGpfMpZSmfUxbUGfAO-qyO0ysoVINySwmSdLotVh7lEHAaWP27vAxM-R5bvea_8sTV85QbGuNCZ6YaE3Bo8zfoNrqZe5vK77vVqsFnMs7t_koQbAnUbTM" />
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- Main Workspace -->
+        <main class="flex-1 p-container-padding pb-24 overflow-x-hidden">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="font-h2 text-h2 text-on-surface mb-1">Dashboard Overview</h2>
+                    <p class="font-body-md text-body-md text-on-surface-variant">Real-time metrics for current academic
+                        term.</p>
+                </div>
+                <div
+                    class="text-sm font-medium text-on-surface-variant bg-surface-container py-1.5 px-3 rounded-lg border border-outline-variant/30 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">today</span>
+                    <span id="current-date">October 24, 2023</span>
+                </div>
+            </div>
+            <!-- Summary Cards (Bento style grid) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-8">
+                <!-- Card 1 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/20 shadow-[0_4px_6px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_12px_rgba(0,0,0,0.08)] transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div
+                            class="p-3 bg-secondary-container text-on-secondary-container rounded-lg group-hover:bg-primary-container group-hover:text-on-primary transition-colors">
+                            <span class="material-symbols-outlined"
+                                style="font-variation-settings: 'FILL' 1;">groups</span>
+                        </div>
+                        <span
+                            class="flex items-center text-primary-container text-sm font-semibold bg-primary-fixed py-0.5 px-2 rounded-full">+2.4%</span>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Total Students</p>
+                    <h3 class="font-h1 text-h1 text-on-surface">1,248</h3>
+                </div>
+                <!-- Card 2 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/20 shadow-[0_4px_6px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_12px_rgba(0,0,0,0.08)] transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div
+                            class="p-3 bg-secondary-container text-on-secondary-container rounded-lg group-hover:bg-primary-container group-hover:text-on-primary transition-colors">
+                            <span class="material-symbols-outlined"
+                                style="font-variation-settings: 'FILL' 1;">badge</span>
+                        </div>
+                        <span
+                            class="flex items-center text-outline text-sm font-semibold bg-surface-container py-0.5 px-2 rounded-full">0.0%</span>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Total Teachers</p>
+                    <h3 class="font-h1 text-h1 text-on-surface">84</h3>
+                </div>
+                <!-- Card 3 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/20 shadow-[0_4px_6px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_12px_rgba(0,0,0,0.08)] transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div
+                            class="p-3 bg-secondary-container text-on-secondary-container rounded-lg group-hover:bg-primary-container group-hover:text-on-primary transition-colors">
+                            <span class="material-symbols-outlined"
+                                style="font-variation-settings: 'FILL' 1;">meeting_room</span>
+                        </div>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Total Classes</p>
+                    <h3 class="font-h1 text-h1 text-on-surface">42</h3>
+                </div>
+                <!-- Card 4 -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/20 shadow-[0_4px_6px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_12px_rgba(0,0,0,0.08)] transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div
+                            class="p-3 bg-secondary-container text-on-secondary-container rounded-lg group-hover:bg-primary-container group-hover:text-on-primary transition-colors">
+                            <span class="material-symbols-outlined"
+                                style="font-variation-settings: 'FILL' 1;">menu_book</span>
+                        </div>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Active Subjects
+                    </p>
+                    <h3 class="font-h1 text-h1 text-on-surface">26</h3>
+                </div>
+            </div>
+            <!-- Lower Grid Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+                <!-- Active Schedule Table (Takes up 2 columns) -->
+                <div
+                    class="lg:col-span-2 bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-[0_4px_6px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col">
+                    <div
+                        class="p-5 border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
+                        <h3 class="font-h3 text-h3 text-on-surface flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                            Active Schedule Today
+                        </h3>
+                        <button
+                            class="text-sm font-semibold text-primary hover:text-primary-container transition-colors flex items-center gap-1">
+                            View Full <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-surface-container-low font-table-header text-table-header text-outline uppercase tracking-wider">
+                                    <th class="py-3 px-5 border-b border-outline-variant/20">Time</th>
+                                    <th class="py-3 px-5 border-b border-outline-variant/20">Subject</th>
+                                    <th class="py-3 px-5 border-b border-outline-variant/20">Class</th>
+                                    <th class="py-3 px-5 border-b border-outline-variant/20">Teacher</th>
+                                    <th class="py-3 px-5 border-b border-outline-variant/20">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font-body-md text-body-md text-on-surface">
+                                <tr
+                                    class="border-b border-outline-variant/10 hover:bg-surface-container-low/50 transition-colors">
+                                    <td class="py-3 px-5 whitespace-nowrap">08:00 - 09:30</td>
+                                    <td class="py-3 px-5 font-semibold">Islamic History</td>
+                                    <td class="py-3 px-5 text-on-surface-variant">Grade 10-A</td>
+                                    <td class="py-3 px-5 flex items-center gap-2">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold text-on-surface-variant">
+                                            AH</div>
+                                        Ahmad Hassan
+                                    </td>
+                                    <td class="py-3 px-5">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-fixed text-on-primary-fixed">Ongoing</span>
+                                    </td>
+                                </tr>
+                                <tr
+                                    class="bg-surface-bright border-b border-outline-variant/10 hover:bg-surface-container-low/50 transition-colors">
+                                    <td class="py-3 px-5 whitespace-nowrap">08:00 - 09:30</td>
+                                    <td class="py-3 px-5 font-semibold">Mathematics</td>
+                                    <td class="py-3 px-5 text-on-surface-variant">Grade 11-B</td>
+                                    <td class="py-3 px-5 flex items-center gap-2">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold text-on-surface-variant">
+                                            FZ</div>
+                                        Fatima Zahra
+                                    </td>
+                                    <td class="py-3 px-5">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-fixed text-on-primary-fixed">Ongoing</span>
+                                    </td>
+                                </tr>
+                                <tr
+                                    class="border-b border-outline-variant/10 hover:bg-surface-container-low/50 transition-colors">
+                                    <td class="py-3 px-5 whitespace-nowrap text-outline">09:45 - 11:15</td>
+                                    <td class="py-3 px-5 font-semibold text-outline">Arabic Literature</td>
+                                    <td class="py-3 px-5 text-outline">Grade 12-A</td>
+                                    <td class="py-3 px-5 flex items-center gap-2 text-outline">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold text-outline">
+                                            MB</div>
+                                        Muhammad Bilal
+                                    </td>
+                                    <td class="py-3 px-5">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-highest text-on-surface-variant">Upcoming</span>
+                                    </td>
+                                </tr>
+                                <tr
+                                    class="bg-surface-bright border-b border-outline-variant/10 hover:bg-surface-container-low/50 transition-colors">
+                                    <td class="py-3 px-5 whitespace-nowrap text-outline">09:45 - 11:15</td>
+                                    <td class="py-3 px-5 font-semibold text-outline">Physics</td>
+                                    <td class="py-3 px-5 text-outline">Grade 10-C</td>
+                                    <td class="py-3 px-5 flex items-center gap-2 text-outline">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold text-outline">
+                                            SI</div>
+                                        Siti Ibrahim
+                                    </td>
+                                    <td class="py-3 px-5">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-highest text-on-surface-variant">Upcoming</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Right Column: Quick Actions & Chart -->
+                <div class="flex flex-col gap-gutter">
+                    <!-- Quick Actions -->
+                    <div
+                        class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/20 shadow-[0_4px_6px_rgba(0,0,0,0.05)]">
+                        <h3 class="font-h3 text-h3 text-on-surface mb-4">Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button
+                                class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-highest transition-colors border border-outline-variant/30 hover:border-primary/30 group">
+                                <span
+                                    class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">person_add</span>
+                                <span class="font-label-sm text-label-sm text-on-surface text-center">Add Student</span>
+                            </button>
+                            <button
+                                class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-highest transition-colors border border-outline-variant/30 hover:border-primary/30 group">
+                                <span
+                                    class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">event_available</span>
+                                <span class="font-label-sm text-label-sm text-on-surface text-center">Update
+                                    Schedule</span>
+                            </button>
+                            <button
+                                class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-highest transition-colors border border-outline-variant/30 hover:border-primary/30 group">
+                                <span
+                                    class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">mail</span>
+                                <span class="font-label-sm text-label-sm text-on-surface text-center">Send Notice</span>
+                            </button>
+                            <button
+                                class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-highest transition-colors border border-outline-variant/30 hover:border-primary/30 group">
+                                <span
+                                    class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">receipt_long</span>
+                                <span class="font-label-sm text-label-sm text-on-surface text-center">Generate
+                                    Report</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Attendance Chart Card (Stylized) -->
+                    <div
+                        class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/20 shadow-[0_4px_6px_rgba(0,0,0,0.05)] flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-h3 text-h3 text-on-surface">Weekly Attendance</h3>
+                            <button class="p-1 rounded hover:bg-surface-container transition-colors text-outline">
+                                <span class="material-symbols-outlined">more_vert</span>
+                            </button>
+                        </div>
+                        <!-- CSS Bar Chart Representation -->
+                        <div
+                            class="mt-auto h-32 flex items-end justify-between gap-2 pt-4 border-b border-outline-variant/20 pb-2">
+                            <div class="w-full flex flex-col items-center gap-1 group">
+                                <div
+                                    class="w-full bg-primary-container/20 rounded-t-sm h-[85%] relative group-hover:bg-primary-container/40 transition-colors">
+                                    <div
+                                        class="absolute bottom-0 w-full bg-primary-container rounded-t-sm h-full shadow-[0_-2px_4px_rgba(0,0,0,0.1)]">
+                                    </div>
+                                </div>
+                                <span class="font-label-sm text-[10px] text-outline">Mon</span>
+                            </div>
+                            <div class="w-full flex flex-col items-center gap-1 group">
+                                <div
+                                    class="w-full bg-primary-container/20 rounded-t-sm h-[92%] relative group-hover:bg-primary-container/40 transition-colors">
+                                    <div
+                                        class="absolute bottom-0 w-full bg-primary-container rounded-t-sm h-full shadow-[0_-2px_4px_rgba(0,0,0,0.1)]">
+                                    </div>
+                                </div>
+                                <span class="font-label-sm text-[10px] text-outline">Tue</span>
+                            </div>
+                            <div class="w-full flex flex-col items-center gap-1 group">
+                                <div
+                                    class="w-full bg-primary-container/20 rounded-t-sm h-[78%] relative group-hover:bg-primary-container/40 transition-colors">
+                                    <div
+                                        class="absolute bottom-0 w-full bg-tertiary-container rounded-t-sm h-full shadow-[0_-2px_4px_rgba(0,0,0,0.1)]">
+                                    </div>
+                                </div>
+                                <span class="font-label-sm text-[10px] text-outline">Wed</span>
+                            </div>
+                            <div class="w-full flex flex-col items-center gap-1 group">
+                                <div
+                                    class="w-full bg-primary-container/20 rounded-t-sm h-[95%] relative group-hover:bg-primary-container/40 transition-colors">
+                                    <div
+                                        class="absolute bottom-0 w-full bg-primary-container rounded-t-sm h-full shadow-[0_-2px_4px_rgba(0,0,0,0.1)]">
+                                    </div>
+                                </div>
+                                <span class="font-label-sm text-[10px] text-outline">Thu</span>
+                            </div>
+                            <div class="w-full flex flex-col items-center gap-1 group">
+                                <div
+                                    class="w-full bg-primary-container/20 rounded-t-sm h-[88%] relative group-hover:bg-primary-container/40 transition-colors">
+                                    <div
+                                        class="absolute bottom-0 w-full bg-primary-container rounded-t-sm h-full shadow-[0_-2px_4px_rgba(0,0,0,0.1)]">
+                                    </div>
+                                </div>
+                                <span class="font-label-sm text-[10px] text-outline">Fri</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center text-sm">
+                            <span class="text-on-surface-variant font-medium">Average Rate</span>
+                            <span class="text-primary-container font-bold text-lg">94.2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
