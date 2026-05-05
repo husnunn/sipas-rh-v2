@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesAdminDeletes;
 use App\Http\Controllers\Controller;
 use App\Models\PasswordResetAudit;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class AccountController extends Controller
 {
+    use HandlesAdminDeletes;
+
     public function create(): Response
     {
         return Inertia::render('Admin/Accounts/Create');
@@ -31,7 +33,9 @@ class AccountController extends Controller
             'is_active' => ['boolean'],
         ]);
 
-        $validated['password'] = bcrypt($validated['password']);
+        $plainPassword = $validated['password'];
+        $validated['password'] = bcrypt($plainPassword);
+        $validated['plain_password'] = $plainPassword;
         $validated['is_active'] = $request->input('is_active', true);
 
         User::create($validated);
@@ -41,10 +45,27 @@ class AccountController extends Controller
             'message' => 'Akun berhasil ditambahkan.',
         ]);
     }
+
+    public function show(User $user): Response
+    {
+        $user->load([
+            'teacherProfile.subjects',
+            'studentProfile.classes',
+            'passwordResetAudits' => fn ($q) => $q->with('resetByAdmin:id,name')->latest()->limit(10),
+        ]);
+
+        return Inertia::render('Admin/Accounts/Show', [
+            'user' => $user->makeVisible('plain_password'),
+        ]);
+    }
+
     public function index(Request $request): Response
     {
         $users = User::query()
             ->when($request->query('role'), fn ($q, $role) => $q->whereJsonContains('roles', $role))
+            ->when(in_array($request->query('status'), ['active', 'inactive'], true), function ($query) use ($request): void {
+                $query->where('is_active', $request->query('status') === 'active');
+            })
             ->when($request->query('search'), function ($q, $search) {
                 $q->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
@@ -53,11 +74,12 @@ class AccountController extends Controller
                 });
             })
             ->orderByDesc('id')
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         return Inertia::render('Admin/Accounts/Index', [
             'users' => $users,
-            'filters' => $request->only('role', 'search'),
+            'filters' => $request->only('role', 'search', 'status'),
         ]);
     }
 
@@ -72,6 +94,7 @@ class AccountController extends Controller
 
         $user->update([
             'password' => $newPassword,
+            'plain_password' => $newPassword,
             'must_change_password' => true,
         ]);
 
@@ -114,5 +137,33 @@ class AccountController extends Controller
             'type' => 'success',
             'message' => "Akun {$user->name} berhasil {$status}.",
         ]);
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:users,id'],
+        ]);
+
+        $ids = collect($validated['ids'])->reject(fn ($id) => $id === $request->user()->id)->values();
+
+        if ($ids->isEmpty()) {
+            return back()->with('flash', [
+                'type' => 'error',
+                'message' => 'Tidak bisa menghapus akun Anda sendiri.',
+            ]);
+        }
+
+        return $this->tryDelete(
+            function () use ($ids): void {
+                $idList = $ids->all();
+                User::purgePasswordResetAuditsForUserIds($idList);
+                User::query()->whereIn('id', $idList)->delete();
+            },
+            'admin.accounts.index',
+            ['type' => 'success', 'message' => $ids->count().' akun berhasil dihapus.'],
+            'Gagal menghapus akun. Silakan coba lagi.',
+        );
     }
 }

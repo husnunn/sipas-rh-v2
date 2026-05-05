@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
+import { index as adminAcademicCalendarEvents } from '@/actions/App/Http/Controllers/Admin/AcademicCalendarEventController';
 import { index as adminAccounts } from '@/actions/App/Http/Controllers/Admin/AccountController';
+import { index as adminAttendanceSites } from '@/actions/App/Http/Controllers/Admin/AttendanceSiteController';
 import { index as adminDashboard } from '@/actions/App/Http/Controllers/Admin/DashboardController';
 import { index as adminStudents } from '@/actions/App/Http/Controllers/Admin/StudentController';
+import { useAppSidebar } from '@/composables/useAppSidebar';
 import type { BreadcrumbItem } from '@/types';
 
 type Props = {
@@ -14,12 +17,25 @@ withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
+const { isMobileOpen, toggleMobile } = useAppSidebar();
 </script>
 
 <template>
     <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 right-0 w-full z-40 border-b border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center h-16 px-4 lg:px-8">
-        <div class="flex items-center gap-6">
-            <div class="text-emerald-900 dark:text-emerald-100 font-bold font-['Inter'] text-sm hidden sm:block">Academic Administration</div>
+        <div class="flex items-center gap-4">
+            <button
+                type="button"
+                class="flex h-10 w-10 items-center justify-center rounded-lg text-emerald-800 hover:bg-emerald-50 dark:text-emerald-200 dark:hover:bg-slate-800 lg:hidden"
+                :aria-expanded="isMobileOpen"
+                aria-controls="admin-sidebar-nav"
+                aria-label="Buka menu samping"
+                @click="toggleMobile"
+            >
+                <span class="material-symbols-outlined text-[22px]">menu</span>
+            </button>
+            <div class="hidden text-sm font-bold font-[\'Inter\'] text-emerald-900 dark:text-emerald-100 sm:block">
+                Academic Administration
+            </div>
             <!-- Search -->
             <div class="relative w-64 hidden lg:block">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
@@ -35,6 +51,10 @@ const page = usePage();
                 :href="adminDashboard().url">Academic</Link>
             <Link class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 transition-colors h-full flex items-center px-4 font-['Inter'] text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md"
                 :href="adminStudents().url">Personnel</Link>
+            <Link class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 transition-colors h-full flex items-center px-4 font-['Inter'] text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md"
+                :href="adminAttendanceSites().url">Attendance</Link>
+            <Link class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 transition-colors h-full flex items-center px-4 font-['Inter'] text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md"
+                :href="adminAcademicCalendarEvents().url">Calendar</Link>
             <Link class="text-slate-500 dark:text-slate-400 hover:text-emerald-600 transition-colors h-full flex items-center px-4 font-['Inter'] text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md"
                 :href="adminAccounts().url">System</Link>
         </div>

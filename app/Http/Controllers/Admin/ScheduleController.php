@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesAdminDeletes;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreScheduleRequest;
 use App\Http\Requests\Admin\UpdateScheduleRequest;
@@ -11,11 +12,14 @@ use App\Models\SchoolYear;
 use App\Models\Subject;
 use App\Models\TeacherProfile;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ScheduleController extends Controller
 {
+    use HandlesAdminDeletes;
+
     public function index(): Response
     {
         $activeSchoolYear = SchoolYear::active()->first();
@@ -90,9 +94,30 @@ class ScheduleController extends Controller
 
     public function destroy(Schedule $schedule): RedirectResponse
     {
-        $schedule->delete();
+        return $this->tryDelete(
+            function () use ($schedule): void {
+                $schedule->delete();
+            },
+            'admin.schedules.index',
+            ['type' => 'success', 'message' => 'Jadwal berhasil dihapus.'],
+            'Gagal menghapus jadwal. Silakan coba lagi.',
+        );
+    }
 
-        return redirect()->route('admin.schedules.index')
-            ->with('flash', ['type' => 'success', 'message' => 'Jadwal berhasil dihapus.']);
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:schedules,id'],
+        ]);
+
+        return $this->tryDelete(
+            function () use ($validated): void {
+                Schedule::whereIn('id', $validated['ids'])->delete();
+            },
+            'admin.schedules.index',
+            ['type' => 'success', 'message' => count($validated['ids']).' jadwal berhasil dihapus.'],
+            'Gagal menghapus jadwal. Silakan coba lagi.',
+        );
     }
 }

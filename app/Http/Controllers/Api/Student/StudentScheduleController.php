@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ScheduleResource;
+use App\Models\AcademicCalendarEvent;
 use App\Models\Schedule;
 use App\Models\SchoolYear;
+use App\Services\Attendance\SchoolAttendanceTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -13,6 +15,22 @@ class StudentScheduleController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
+        if ($request->query('date')) {
+            $date = SchoolAttendanceTime::parseCalendarDate((string) $request->query('date'));
+            $event = AcademicCalendarEvent::query()
+                ->active()
+                ->overlapsDate($date)
+                ->where(function ($query) {
+                    $query->where('allow_attendance', false)
+                        ->orWhere('override_schedule', true);
+                })
+                ->first();
+
+            if ($event) {
+                return ScheduleResource::collection(collect());
+            }
+        }
+
         $user = $request->user();
         $studentProfile = $user->studentProfile;
 

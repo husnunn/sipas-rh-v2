@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesAdminDeletes;
 use App\Http\Controllers\Controller;
 use App\Models\Subject;
 use Illuminate\Http\RedirectResponse;
@@ -11,6 +12,8 @@ use Inertia\Response;
 
 class SubjectController extends Controller
 {
+    use HandlesAdminDeletes;
+
     public function index(): Response
     {
         $subjects = Subject::query()
@@ -68,7 +71,7 @@ class SubjectController extends Controller
     public function update(Request $request, Subject $subject): RedirectResponse
     {
         $validated = $request->validate([
-            'code' => ['required', 'string', 'max:10', 'unique:subjects,code,' . $subject->id],
+            'code' => ['required', 'string', 'max:10', 'unique:subjects,code,'.$subject->id],
             'name' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
@@ -85,9 +88,30 @@ class SubjectController extends Controller
 
     public function destroy(Subject $subject): RedirectResponse
     {
-        $subject->delete();
+        return $this->tryDelete(
+            function () use ($subject): void {
+                $subject->delete();
+            },
+            'admin.subjects.index',
+            ['type' => 'success', 'message' => 'Mata pelajaran berhasil dihapus.'],
+            'Gagal menghapus mata pelajaran. Silakan coba lagi.',
+        );
+    }
 
-        return redirect()->route('admin.subjects.index')
-            ->with('flash', ['type' => 'success', 'message' => 'Mata pelajaran berhasil dihapus.']);
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:subjects,id'],
+        ]);
+
+        return $this->tryDelete(
+            function () use ($validated): void {
+                Subject::whereIn('id', $validated['ids'])->delete();
+            },
+            'admin.subjects.index',
+            ['type' => 'success', 'message' => count($validated['ids']).' mata pelajaran berhasil dihapus.'],
+            'Gagal menghapus mata pelajaran. Silakan coba lagi.',
+        );
     }
 }

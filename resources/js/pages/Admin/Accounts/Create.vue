@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import { store, index } from '@/actions/App/Http/Controllers/Admin/AccountController';
-import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import InputError from '@/components/InputError.vue';
+import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 
 defineOptions({ layout: AppSidebarLayout });
 

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface-variant": "#404944",
+            "inverse-on-surface": "#f0f1f2",
+            "secondary-container": "#bfe9d9",
+            "primary": "#003527",
+            "tertiary-container": "#cca72f",
+            "surface-tint": "#2b6954",
+            "surface-container-highest": "#e1e3e4",
+            "on-tertiary": "#ffffff",
+            "on-error-container": "#93000a",
+            "secondary": "#406659",
+            "surface-bright": "#f8f9fa",
+            "surface-dim": "#d9dadb",
+            "inverse-primary": "#95d3ba",
+            "error-container": "#ffdad6",
+            "surface-variant": "#e1e3e4",
+            "surface-container-low": "#f3f4f5",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed": "#241a00",
+            "on-secondary-fixed-variant": "#284e42",
+            "inverse-surface": "#2e3132",
+            "on-primary-container": "#80bea6",
+            "primary-fixed": "#b0f0d6",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed": "#002018",
+            "outline": "#707974",
+            "surface-container-high": "#e7e8e9",
+            "outline-variant": "#bfc9c3",
+            "secondary-fixed-dim": "#a7cfc0",
+            "on-tertiary-container": "#4e3d00",
+            "on-secondary": "#ffffff",
+            "primary-fixed-dim": "#95d3ba",
+            "secondary-fixed": "#c2ebdc",
+            "on-surface": "#191c1d",
+            "on-primary-fixed": "#002117",
+            "tertiary": "#735c00",
+            "surface-container": "#edeeef",
+            "on-background": "#191c1d",
+            "on-tertiary-fixed-variant": "#574500",
+            "tertiary-fixed-dim": "#e9c349",
+            "error": "#ba1a1a",
+            "on-secondary-container": "#446a5e",
+            "background": "#f8f9fa",
+            "on-primary-fixed-variant": "#0b513d",
+            "surface": "#f8f9fa",
+            "primary-container": "#064e3b",
+            "tertiary-fixed": "#ffe088"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "stack-md": "16px",
+            "unit": "4px",
+            "stack-sm": "8px",
+            "container-padding": "24px",
+            "stack-lg": "24px",
+            "gutter": "16px",
+            "sidebar-width": "260px"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "h1": ["Inter"],
+            "h3": ["Inter"],
+            "body-md": ["Inter"],
+            "h2": ["Inter"],
+            "table-header": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "h1": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "h2": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "table-header": ["13px", {"lineHeight": "18px", "fontWeight": "600"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background font-body-md text-on-background antialiased">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-[#022C22] border-r border-emerald-900 shadow-xl flex flex-col h-full font-inter text-sm antialiased z-40">
+<div class="p-stack-lg flex items-center space-x-3">
+<div class="h-10 w-10 bg-on-primary-fixed-variant rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="school">school</span>
+</div>
+<div>
+<h1 class="text-emerald-50 font-bold tracking-tight text-lg leading-tight">Robithotul Hikmah</h1>
+<p class="text-emerald-500/70 text-xs font-medium">Jombang Admin</p>
+</div>
+</div>
+<nav class="flex-1 mt-stack-lg px-2 space-y-1">
+<a class="text-gray-400 hover:text-white py-3 px-4 transition-all hover:bg-emerald-800/50 flex items-center space-x-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-gray-400 hover:text-white py-3 px-4 transition-all hover:bg-emerald-800/50 flex items-center space-x-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span>Students</span>
+</a>
+<a class="text-gray-400 hover:text-white py-3 px-4 transition-all hover:bg-emerald-800/50 flex items-center space-x-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span>Teachers</span>
+</a>
+<a class="text-white bg-emerald-600/20 border-l-4 border-emerald-500 py-3 px-4 font-semibold flex items-center space-x-3" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>Attendance</span>
+</a>
+<a class="text-gray-400 hover:text-white py-3 px-4 transition-all hover:bg-emerald-800/50 flex items-center space-x-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span>Academic Records</span>
+</a>
+<a class="text-gray-400 hover:text-white py-3 px-4 transition-all hover:bg-emerald-800/50 flex items-center space-x-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-4 border-t border-emerald-900/50">
+<button class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded-xl flex items-center justify-center space-x-2 transition-transform active:scale-[0.98]">
+<span class="material-symbols-outlined text-sm" data-icon="file_download">file_download</span>
+<span>Export Reports</span>
+</button>
+<div class="mt-4 space-y-1">
+<a class="text-gray-400 hover:text-white py-2 px-4 text-xs flex items-center space-x-3 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+<span>Help Center</span>
+</a>
+<a class="text-gray-400 hover:text-white py-2 px-4 text-xs flex items-center space-x-3 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopAppBar Anchor -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] z-30 bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-8 h-16 font-inter text-sm font-medium">
+<div class="flex items-center space-x-8">
+<h2 class="text-lg font-black text-emerald-900">Academic Portal</h2>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+<span class="material-symbols-outlined text-lg" data-icon="search">search</span>
+</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border border-outline-variant rounded-full text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none w-64" placeholder="Search data..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="hidden lg:flex items-center space-x-4 text-gray-500">
+<a class="hover:text-emerald-700 transition-colors" href="#">History</a>
+<a class="hover:text-emerald-700 transition-colors" href="#">Statistics</a>
+<a class="hover:text-emerald-700 transition-colors" href="#">Logs</a>
+</div>
+<div class="h-6 w-px bg-gray-200"></div>
+<div class="flex items-center space-x-3">
+<button class="p-2 text-on-surface-variant hover:bg-gray-50 rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 h-2 w-2 bg-error rounded-full border-2 border-white"></span>
+</button>
+<div class="flex items-center space-x-2 cursor-pointer active:opacity-80 group">
+<img alt="Administrator Profile" class="h-8 w-8 rounded-full border-2 border-emerald-100 group-hover:border-emerald-300 transition-all" data-alt="professional portrait of a middle-aged academic administrator in a modern office setting, soft professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKUQuOekIxdMoOzKCJk8feV-JHJAvjlSHJXDKmsObC07uooRhcDlaNAb95bH4ljknucK_J8isOKl8EDG5zTUYvkG6cDeAj-h2brKItqLsrrpZmwL2JQ3KAWJ1tiAismoB1DMM3xC-lEFwmwQTHmla_ukDMX5TXSCDv6NBDx25HHd5LRKS5aaaH31E0QFvliWZeQ4cOdonD-5vCY3Ys_JiZZu72-Iq8ZMtBP9bVgaLxOvAm8Fp4VlKKR4WHNfKGbpT-a9I5XYWwfrQ"/>
+<div class="flex flex-col items-start leading-none">
+<span class="text-xs font-bold text-on-surface">Admin Utama</span>
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">Super Admin</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-16 min-h-screen">
+<div class="p-container-padding max-w-[1400px] mx-auto space-y-stack-lg">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-gutter">
+<div class="space-y-unit">
+<h1 class="font-h1 text-h1 text-emerald-900">Riwayat Absensi</h1>
+<p class="font-body-md text-on-surface-variant">Kelola dan pantau kehadiran seluruh civitas akademika Robithotul Hikmah.</p>
+</div>
+<div class="flex items-center gap-stack-sm">
+<button class="flex items-center gap-stack-sm bg-white border border-outline-variant px-4 py-2 rounded-xl text-emerald-700 font-semibold shadow-sm hover:bg-gray-50 transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
+<span>Filter View</span>
+</button>
+<button class="flex items-center gap-stack-sm bg-primary px-5 py-2 rounded-xl text-white font-semibold shadow-md hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+<span>Export CSV</span>
+</button>
+</div>
+</div>
+<!-- Tab System -->
+<div class="bg-surface-container-low p-1 rounded-full w-fit flex items-center shadow-inner">
+<button class="px-8 py-2.5 rounded-full bg-white text-primary font-bold shadow-sm transition-all text-sm">
+          Absensi Siswa
+        </button>
+<button class="px-8 py-2.5 rounded-full text-on-surface-variant font-medium hover:text-primary transition-all text-sm">
+          Absensi Guru
+        </button>
+</div>
+<!-- Filter Bar -->
+<div class="bg-white p-gutter rounded-xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-4 gap-gutter items-end">
+<div class="space-y-unit">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase">Rentang Tanggal</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none" type="date"/>
+</div>
+</div>
+<div class="space-y-unit">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase">Kelas / Departemen</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none">
+<option>Semua Kelas</option>
+<option>Kelas X - IPA</option>
+<option>Kelas XI - IPS</option>
+<option>Kelas XII - Tahfidz</option>
+</select>
+</div>
+<div class="space-y-unit">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase">Status Kehadiran</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none">
+<option>Semua Status</option>
+<option>Hadir</option>
+<option>Izin</option>
+<option>Sakit</option>
+<option>Alpa</option>
+</select>
+</div>
+<div class="flex items-center gap-stack-sm">
+<button class="flex-1 bg-secondary-container text-on-secondary-container font-semibold py-2 rounded-xl hover:brightness-95 transition-all">
+            Apply Filters
+          </button>
+<button class="p-2 text-gray-400 hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+</button>
+</div>
+</div>
+<!-- Data Table Area -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50 border-b border-gray-200">
+<th class="px-6 py-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">Tanggal</th>
+<th class="px-6 py-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">Student ID</th>
+<th class="px-6 py-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">Nama Lengkap</th>
+<th class="px-6 py-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">Kelas</th>
+<th class="px-6 py-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">Jam Masuk</th>
+<th class="px-6 py-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider text-center">Status</th>
+<th class="px-6 py-4 font-table-header text-table-header text-on-surface-variant uppercase tracking-wider">Catatan</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<!-- Row 1 -->
+<tr class="hover:bg-emerald-50/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface">24 May 2024</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-secondary">RH-2024-001</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="h-8 w-8 rounded-full bg-primary-fixed flex items-center justify-center text-xs font-bold mr-3">AM</div>
+<span class="text-sm font-semibold text-on-surface">Ahmad Maulana</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">XII - Tahfidz</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-700">06:45 WIB</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 uppercase">Hadir</span>
+</td>
+<td class="px-6 py-4 text-sm text-gray-400 italic">Tepat waktu</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-gray-50/50 hover:bg-emerald-50/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface">24 May 2024</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-secondary">RH-2024-042</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="h-8 w-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-xs font-bold mr-3">SF</div>
+<span class="text-sm font-semibold text-on-surface">Siti Fatimah</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">XI - IPA 1</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">-- : --</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">Izin</span>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Acara Keluarga</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-emerald-50/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface">24 May 2024</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-secondary">RH-2024-118</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="h-8 w-8 rounded-full bg-secondary-fixed-dim flex items-center justify-center text-xs font-bold mr-3">RD</div>
+<span class="text-sm font-semibold text-on-surface">Rizky Darmawan</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">X - IPS 2</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">-- : --</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-error-container text-error uppercase">Alpa</span>
+</td>
+<td class="px-6 py-4 text-sm text-error font-medium">Tanpa Keterangan</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-gray-50/50 hover:bg-emerald-50/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface">24 May 2024</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-secondary">RH-2024-056</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="h-8 w-8 rounded-full bg-primary-fixed-dim flex items-center justify-center text-xs font-bold mr-3">LN</div>
+<span class="text-sm font-semibold text-on-surface">Laila Nurhaliza</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">XII - IPA 2</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-700">07:05 WIB</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 uppercase">Hadir</span>
+</td>
+<td class="px-6 py-4 text-sm text-amber-600 italic">Terlambat 5m</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-emerald-50/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface">24 May 2024</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-secondary">RH-2024-089</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="h-8 w-8 rounded-full bg-on-secondary-fixed flex items-center justify-center text-xs font-bold mr-3 text-white">BA</div>
+<span class="text-sm font-semibold text-on-surface">Budi Arisandi</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-on-surface-variant">XI - Tahfidz</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">-- : --</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700 uppercase">Sakit</span>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Demam Berdarah</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-white border-t border-gray-100 flex items-center justify-between">
+<p class="text-sm text-on-surface-variant">
+            Showing <span class="font-bold">1</span> to <span class="font-bold">10</span> of <span class="font-bold">482</span> entries
+          </p>
+<div class="flex items-center space-x-1">
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-primary text-white font-bold text-sm">1</button>
+<button class="w-10 h-10 rounded-lg text-on-surface-variant hover:bg-gray-50 font-medium text-sm">2</button>
+<button class="w-10 h-10 rounded-lg text-on-surface-variant hover:bg-gray-50 font-medium text-sm">3</button>
+<span class="px-2 text-gray-400">...</span>
+<button class="w-10 h-10 rounded-lg text-on-surface-variant hover:bg-gray-50 font-medium text-sm">48</button>
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Stats Bento Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-primary p-gutter rounded-xl shadow-lg flex items-center space-x-gutter">
+<div class="bg-white/10 p-3 rounded-full">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="how_to_reg" style="font-variation-settings: 'FILL' 1;">how_to_reg</span>
+</div>
+<div>
+<p class="text-emerald-100/70 text-xs font-bold uppercase tracking-widest">Tingkat Kehadiran</p>
+<h3 class="text-white text-2xl font-black">94.8%</h3>
+<p class="text-emerald-400 text-xs mt-1">+1.2% dari kemarin</p>
+</div>
+</div>
+<div class="bg-white p-gutter rounded-xl border border-gray-100 shadow-sm flex items-center space-x-gutter">
+<div class="bg-amber-50 p-3 rounded-full">
+<span class="material-symbols-outlined text-amber-600 text-3xl" data-icon="assignment_late" style="font-variation-settings: 'FILL' 1;">assignment_late</span>
+</div>
+<div>
+<p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Total Alpa/Sakit</p>
+<h3 class="text-on-surface text-2xl font-black">12 Siswa</h3>
+<p class="text-gray-400 text-xs mt-1">Hari ini: 24 Mei 2024</p>
+</div>
+</div>
+<div class="bg-white p-gutter rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+<div class="flex items-center space-x-gutter">
+<div class="bg-blue-50 p-3 rounded-full">
+<span class="material-symbols-outlined text-blue-600 text-3xl" data-icon="groups" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<div>
+<p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Guru Hadir</p>
+<h3 class="text-on-surface text-2xl font-black">38 / 40</h3>
+<p class="text-emerald-600 text-xs mt-1">95.0% Aktif mengajar</p>
+</div>
+</div>
+<button class="p-2 bg-gray-50 rounded-lg text-primary hover:bg-emerald-50">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

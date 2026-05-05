@@ -1,5 +1,17 @@
 <?php
 
+use App\Http\Controllers\Api\Mobile\MobileProfileController;
+use App\Http\Controllers\Api\Student\StudentAttendanceController;
+use App\Http\Controllers\Api\Student\StudentAuthController;
+use App\Http\Controllers\Api\Student\StudentDailyAttendanceController;
+use App\Http\Controllers\Api\Student\StudentPasswordController;
+use App\Http\Controllers\Api\Student\StudentProfileController;
+use App\Http\Controllers\Api\Student\StudentScheduleController;
+use App\Http\Controllers\Api\Teacher\TeacherAttendanceController;
+use App\Http\Controllers\Api\Teacher\TeacherAuthController;
+use App\Http\Controllers\Api\Teacher\TeacherPasswordController;
+use App\Http\Controllers\Api\Teacher\TeacherProfileController;
+use App\Http\Controllers\Api\Teacher\TeacherScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,36 +24,60 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::prefix('mobile')->middleware(['auth:sanctum', 'mobile_profile'])->group(function () {
+    Route::get('/profile', [MobileProfileController::class, 'show']);
+    Route::post('/profile/photo', [MobileProfileController::class, 'updatePhoto']);
+    Route::post('/profile/password', [MobileProfileController::class, 'updatePassword']);
+});
+
 // === API GURU ===
 Route::prefix('v1/teacher')->name('api.teacher.')->group(function () {
-    Route::post('/login', [\App\Http\Controllers\Api\Teacher\TeacherAuthController::class, 'login'])
+    Route::post('/login', [TeacherAuthController::class, 'login'])
         ->name('login');
 
     Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
-        Route::get('/me', [\App\Http\Controllers\Api\Teacher\TeacherProfileController::class, 'me'])
+        Route::get('/me', [TeacherProfileController::class, 'me'])
             ->name('me');
-        Route::get('/schedule', [\App\Http\Controllers\Api\Teacher\TeacherScheduleController::class, 'index'])
+        Route::get('/schedule', [TeacherScheduleController::class, 'index'])
             ->name('schedule.index');
-        Route::post('/change-password', [\App\Http\Controllers\Api\Teacher\TeacherPasswordController::class, 'change'])
+        Route::post('/attendance/check-in', [TeacherAttendanceController::class, 'checkIn'])
+            ->name('attendance.check-in');
+        Route::post('/attendance/check-out', [TeacherAttendanceController::class, 'checkOut'])
+            ->name('attendance.check-out');
+        Route::get('/attendance/today', [TeacherAttendanceController::class, 'today'])
+            ->name('attendance.today');
+        Route::post('/change-password', [TeacherPasswordController::class, 'change'])
             ->name('password.change');
-        Route::post('/logout', [\App\Http\Controllers\Api\Teacher\TeacherAuthController::class, 'logout'])
+        Route::post('/logout', [TeacherAuthController::class, 'logout'])
             ->name('logout');
     });
 });
 
 // === API SISWA ===
 Route::prefix('v1/student')->name('api.student.')->group(function () {
-    Route::post('/login', [\App\Http\Controllers\Api\Student\StudentAuthController::class, 'login'])
+    Route::post('/login', [StudentAuthController::class, 'login'])
         ->name('login');
 
     Route::middleware(['auth:sanctum', 'role:student'])->group(function () {
-        Route::get('/me', [\App\Http\Controllers\Api\Student\StudentProfileController::class, 'me'])
+        Route::get('/me', [StudentProfileController::class, 'me'])
             ->name('me');
-        Route::get('/schedule', [\App\Http\Controllers\Api\Student\StudentScheduleController::class, 'index'])
+        Route::get('/schedule', [StudentScheduleController::class, 'index'])
             ->name('schedule.index');
-        Route::post('/change-password', [\App\Http\Controllers\Api\Student\StudentPasswordController::class, 'change'])
+        Route::post('/attendance/check-in', [StudentAttendanceController::class, 'checkIn'])
+            ->name('attendance.check-in');
+        Route::post('/attendance/check-out', [StudentAttendanceController::class, 'checkOut'])
+            ->name('attendance.check-out');
+        Route::get('/attendance/today', [StudentAttendanceController::class, 'today'])
+            ->name('attendance.today');
+        Route::post('/daily-attendance/check-in', [StudentDailyAttendanceController::class, 'checkIn'])
+            ->name('daily-attendance.check-in');
+        Route::post('/daily-attendance/check-out', [StudentDailyAttendanceController::class, 'checkOut'])
+            ->name('daily-attendance.check-out');
+        Route::get('/daily-attendance/today', [StudentDailyAttendanceController::class, 'today'])
+            ->name('daily-attendance.today');
+        Route::post('/change-password', [StudentPasswordController::class, 'change'])
             ->name('password.change');
-        Route::post('/logout', [\App\Http\Controllers\Api\Student\StudentAuthController::class, 'logout'])
+        Route::post('/logout', [StudentAuthController::class, 'logout'])
             ->name('logout');
     });
 });

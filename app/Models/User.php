@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -13,8 +14,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'username', 'password', 'roles', 'is_active', 'must_change_password', 'last_login_at'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
+#[Fillable(['name', 'email', 'username', 'password', 'plain_password', 'roles', 'is_active', 'must_change_password', 'last_login_at'])]
+#[Hidden(['password', 'plain_password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -36,6 +37,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'plain_password' => 'encrypted',
             'roles' => 'array',
             'is_active' => 'boolean',
             'must_change_password' => 'boolean',
@@ -66,14 +68,39 @@ class User extends Authenticatable
         return $this->hasMany(PasswordResetAudit::class, 'reset_by_admin_id');
     }
 
+    public function attendanceRecords(): HasMany
+    {
+        return $this->hasMany(AttendanceRecord::class);
+    }
+
+    public function dailyAttendances(): HasMany
+    {
+        return $this->hasMany(DailyAttendance::class);
+    }
+
+    public function attendanceManualStatuses(): HasMany
+    {
+        return $this->hasMany(AttendanceManualStatus::class);
+    }
+
+    public function attendanceDayOverridesCreated(): HasMany
+    {
+        return $this->hasMany(AttendanceDayOverride::class, 'created_by');
+    }
+
+    public function attendanceDayOverridesUpdated(): HasMany
+    {
+        return $this->hasMany(AttendanceDayOverride::class, 'updated_by');
+    }
+
     // --- Scopes ---
 
-    public function scopeActive(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    public function scopeRole(\Illuminate\Database\Eloquent\Builder $query, string $role): \Illuminate\Database\Eloquent\Builder
+    public function scopeRole(Builder $query, string $role): Builder
     {
         return $query->whereJsonContains('roles', $role);
     }
@@ -101,5 +128,32 @@ class User extends Authenticatable
     public function isStudent(): bool
     {
         return $this->hasRole('student');
+    }
+
+    /**
+     * Hapus audit reset password yang mereferensi salah satu user pada daftar
+     * (sebagai akun yang di-reset atau sebagai admin yang mereset), agar baris
+     * {@see User} dapat dihapus (termasuk bulk delete lewat query builder).
+     *
+     * @param  array<int|string>  $userIds
+     */
+    public static function purgePasswordResetAuditsForUserIds(array $userIds): void
+    {
+        /** @var array<int, int> */
+        $normalized = array_values(array_unique(array_filter(
+            array_map(static fn (mixed $id): int => (int) $id, $userIds),
+            static fn (int $id): bool => $id > 0,
+        )));
+
+        if ($normalized === []) {
+            return;
+        }
+
+        PasswordResetAudit::query()
+            ->where(function ($query) use ($normalized): void {
+                $query->whereIn('user_id', $normalized)
+                    ->orWhereIn('reset_by_admin_id', $normalized);
+            })
+            ->delete();
     }
 }

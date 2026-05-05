@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AttendanceSitePickerApiResource;
 use App\Http\Resources\StudentProfileResource;
+use App\Models\AttendanceSite;
 use Illuminate\Http\Request;
 
 class StudentProfileController extends Controller
@@ -17,6 +19,12 @@ class StudentProfileController extends Controller
             abort(404, 'Profil siswa belum dibuat.');
         }
 
-        return new StudentProfileResource($user->studentProfile);
+        $sites = AttendanceSite::query()
+            ->forApiPicker()
+            ->get(['id', 'name', 'latitude', 'longitude', 'radius_m']);
+
+        return (new StudentProfileResource($user->studentProfile))->additional([
+            'attendance_sites' => AttendanceSitePickerApiResource::collection($sites)->resolve(),
+        ]);
     }
 }

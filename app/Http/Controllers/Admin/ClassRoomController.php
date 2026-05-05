@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesAdminDeletes;
 use App\Http\Controllers\Controller;
 use App\Models\ClassRoom;
 use App\Models\SchoolYear;
@@ -13,6 +14,8 @@ use Inertia\Response;
 
 class ClassRoomController extends Controller
 {
+    use HandlesAdminDeletes;
+
     public function index(): Response
     {
         $classes = ClassRoom::query()
@@ -96,9 +99,30 @@ class ClassRoomController extends Controller
 
     public function destroy(ClassRoom $class): RedirectResponse
     {
-        $class->delete();
+        return $this->tryDelete(
+            function () use ($class): void {
+                $class->delete();
+            },
+            'admin.classes.index',
+            ['type' => 'success', 'message' => 'Data kelas berhasil dihapus.'],
+            'Gagal menghapus data kelas. Silakan coba lagi.',
+        );
+    }
 
-        return redirect()->route('admin.classes.index')
-            ->with('flash', ['type' => 'success', 'message' => 'Data kelas berhasil dihapus.']);
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:classes,id'],
+        ]);
+
+        return $this->tryDelete(
+            function () use ($validated): void {
+                ClassRoom::whereIn('id', $validated['ids'])->delete();
+            },
+            'admin.classes.index',
+            ['type' => 'success', 'message' => count($validated['ids']).' data kelas berhasil dihapus.'],
+            'Gagal menghapus data kelas. Silakan coba lagi.',
+        );
     }
 }

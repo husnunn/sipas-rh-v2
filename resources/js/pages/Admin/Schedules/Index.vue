@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
-import { create, destroy, edit, show } from '@/actions/App/Http/Controllers/Admin/ScheduleController';
+import { Head, Link, router } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { toast } from 'vue-sonner';
+import { bulkDestroy, create, destroy, edit, show } from '@/actions/App/Http/Controllers/Admin/ScheduleController';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
+import TablePagination from '@/components/TablePagination.vue';
 import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
+import { firstVisitErrorMessage, isFlashErrorPage } from '@/lib/inertiaVisitHelpers';
 import type {PaginatedData} from '@/types';
 import type { Schedule, SchoolYear } from '@/types/models';
 
@@ -9,11 +14,74 @@ defineOptions({
     layout: AppSidebarLayout,
 });
 
-defineProps<{
+const props = defineProps<{
     schedules: PaginatedData<Schedule>;
     activeSchoolYear: SchoolYear | null;
     days: Record<string, string>;
 }>();
+
+const selectedIds = ref<number[]>([]);
+
+const allSelected = computed({
+    get: () => props.schedules.data.length > 0 && selectedIds.value.length === props.schedules.data.length,
+    set: (value) => {
+        if (value) {
+            selectedIds.value = props.schedules.data.map(item => item.id);
+        } else {
+            selectedIds.value = [];
+        }
+    }
+});
+
+const confirmBulkDeleteRef = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+
+const bulkDelete = async () => {
+    const confirmed = await confirmBulkDeleteRef.value?.open();
+
+    if (!confirmed) {
+        return;
+    }
+
+    router.delete(bulkDestroy().url, {
+        data: { ids: selectedIds.value },
+        onSuccess: (page) => {
+            if (isFlashErrorPage(page)) {
+                return;
+            }
+
+            selectedIds.value = [];
+        },
+        onError: (errors) => {
+            toast.error(
+                firstVisitErrorMessage(
+                    errors as Record<string, string | string[]>,
+                    'Gagal menghapus jadwal. Periksa data lalu coba lagi.',
+                ),
+            );
+        },
+    });
+};
+
+const confirmDeleteRef = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+
+const handleDelete = async (schedule: Schedule) => {
+    const confirmed = await confirmDeleteRef.value?.open();
+
+    if (!confirmed) {
+        return;
+    }
+
+    router.delete(destroy(schedule).url, {
+        onError: (errors) => {
+            toast.error(
+                firstVisitErrorMessage(
+                    errors as Record<string, string | string[]>,
+                    'Gagal menghapus jadwal. Periksa data lalu coba lagi.',
+                ),
+            );
+        },
+    });
+};
 
 </script>
 
@@ -62,10 +130,25 @@ defineProps<{
 
         <!-- Data Table Container -->
         <div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-surface-container-highest overflow-hidden flex flex-col">
+            
+            <!-- Bulk Actions Toolbar -->
+            <div v-if="selectedIds.length > 0" class="bg-primary-container/20 px-6 py-3 border-b border-surface-container-highest flex items-center justify-between">
+                <span class="font-medium text-on-surface text-sm">{{ selectedIds.length }} data terpilih</span>
+                <div class="flex gap-2">
+                    <button @click="bulkDelete" class="font-label-sm text-label-sm text-error bg-error-container hover:bg-error-container-hover px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                        Hapus Terpilih
+                    </button>
+                </div>
+            </div>
+
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[1000px]">
                     <thead>
                         <tr class="bg-surface-container-low border-b border-surface-container-highest">
+                            <th class="py-3 px-6 w-12 text-center">
+                                <input type="checkbox" v-model="allSelected" class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4 cursor-pointer" />
+                            </th>
                             <th class="font-table-header text-table-header text-on-surface-variant py-3 px-6 uppercase tracking-wider w-32">Day</th>
                             <th class="font-table-header text-table-header text-on-surface-variant py-3 px-6 uppercase tracking-wider w-40">Time</th>
                             <th class="font-table-header text-table-header text-on-surface-variant py-3 px-6 uppercase tracking-wider w-32">Class</th>
@@ -75,7 +158,10 @@ defineProps<{
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-surface-container-highest">
-                        <tr v-for="(schedule, index) in schedules.data" :key="schedule.id" :class="index % 2 === 0 ? 'bg-surface-container-lowest' : 'bg-surface-container-low/40'" class="hover:bg-surface-bright transition-colors group">
+                        <tr v-for="(schedule, index) in schedules.data" :key="schedule.id" :class="[index % 2 === 0 ? 'bg-surface-container-lowest' : 'bg-surface-container-low/40', selectedIds.includes(schedule.id) ? 'bg-primary-container/10' : '']" class="hover:bg-surface-bright transition-colors group">
+                            <td class="py-4 px-6 text-center">
+                                <input type="checkbox" :value="schedule.id" v-model="selectedIds" class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4 cursor-pointer" />
+                            </td>
                             <td class="font-body-md text-body-md text-on-surface py-4 px-6 font-medium capitalize">{{ days[schedule.day_of_week] || schedule.day_of_week }}</td>
                             <td class="font-body-md text-body-md text-on-surface-variant py-4 px-6">{{ schedule.start_time?.substring(0,5) }} - {{ schedule.end_time?.substring(0,5) }}</td>
                             <td class="font-body-md text-body-md text-on-surface-variant py-4 px-6">{{ schedule.class_room?.name }}</td>
@@ -92,36 +178,40 @@ defineProps<{
                                 <div class="flex items-center justify-end gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
                                     <Link :href="show(schedule).url" class="p-1.5 text-outline hover:text-primary transition-colors rounded-md hover:bg-surface-container" title="Detail"><span class="material-symbols-outlined text-[20px]">visibility</span></Link>
                                     <Link :href="edit(schedule).url" class="p-1.5 text-outline hover:text-primary transition-colors rounded-md hover:bg-surface-container" title="Edit"><span class="material-symbols-outlined text-[20px]">edit</span></Link>
-                                    <Link :href="destroy(schedule).url" method="delete" as="button" class="p-1.5 text-outline hover:text-error transition-colors rounded-md hover:bg-surface-container" title="Delete"><span class="material-symbols-outlined text-[20px]">delete</span></Link>
+                                    <button class="p-1.5 text-outline hover:text-error transition-colors rounded-md hover:bg-surface-container" title="Delete" @click="handleDelete(schedule)"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                                 </div>
                             </td>
                         </tr>
                         <tr v-if="schedules.data.length === 0">
-                            <td colspan="6" class="text-center py-8 text-on-surface-variant">No schedules found.</td>
+                            <td colspan="7" class="text-center py-8 text-on-surface-variant">No schedules found.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             
-            <div class="bg-surface-container-lowest px-6 py-4 border-t border-surface-container-highest flex items-center justify-between">
-                <span class="font-body-md text-body-md text-on-surface-variant">Showing <span class="font-medium text-on-surface">{{ schedules.from || 0 }}</span> to <span class="font-medium text-on-surface">{{ schedules.to || 0 }}</span> of <span class="font-medium text-on-surface">{{ schedules.total }}</span> schedules</span>
-                <div class="flex items-center gap-1">
-                    <Link
-                        v-for="(link, i) in schedules.links"
-                        :key="i"
-                        :href="link.url || '#'"
-                        :class="[
-                            'w-8 h-8 flex items-center justify-center rounded transition-colors',
-                            link.active ? 'bg-primary text-on-primary font-medium' : 'hover:bg-surface-container text-on-surface font-body-md text-body-md',
-                            !link.url ? 'opacity-50 cursor-not-allowed' : ''
-                        ]"
-                    >
-                        <span
-                            v-html="link.label.replace('Previous', '<span class=\'material-symbols-outlined text-[20px]\'>chevron_left</span>').replace('Next', '<span class=\'material-symbols-outlined text-[20px]\'>chevron_right</span>')"
-                        />
-                    </Link>
-                </div>
-            </div>
+            <TablePagination
+                :from="schedules.from"
+                :to="schedules.to"
+                :total="schedules.total"
+                :links="schedules.links"
+                item-label="jadwal"
+            />
         </div>
     </div>
+    <ConfirmDialog
+        ref="confirmDeleteRef"
+        title="Hapus Jadwal"
+        message="Data jadwal ini akan dihapus secara permanen. Apakah Anda yakin?"
+        confirm-text="Ya, Hapus"
+        cancel-text="Batal"
+        variant="danger"
+    />
+    <ConfirmDialog
+        ref="confirmBulkDeleteRef"
+        title="Hapus Massal Jadwal"
+        :message="`${selectedIds.length} jadwal terpilih akan dihapus secara permanen. Apakah Anda yakin?`"
+        confirm-text="Ya, Hapus Semua"
+        cancel-text="Batal"
+        variant="danger"
+    />
 </template>

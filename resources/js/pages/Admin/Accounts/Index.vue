@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import { resetPassword, toggleActive, create } from '@/actions/App/Http/Controllers/Admin/AccountController';
+import { ref, computed } from 'vue';
+import { toast } from 'vue-sonner';
+import { bulkDestroy, resetPassword, toggleActive, create, index, show } from '@/actions/App/Http/Controllers/Admin/AccountController';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
+import TablePagination from '@/components/TablePagination.vue';
 import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
+import { firstVisitErrorMessage, isFlashErrorPage } from '@/lib/inertiaVisitHelpers';
 import type {PaginatedData} from '@/types';
 import type { User } from '@/types/models';
 
@@ -9,10 +14,55 @@ defineOptions({
     layout: AppSidebarLayout,
 });
 
-defineProps<{
+const props = defineProps<{
     users: PaginatedData<User>;
     filters: Record<string, string>;
 }>();
+
+const selectedIds = ref<number[]>([]);
+const search = ref(props.filters.search ?? '');
+const role = ref(props.filters.role ?? '');
+const status = ref(props.filters.status ?? '');
+
+const allSelected = computed({
+    get: () => props.users.data.length > 0 && selectedIds.value.length === props.users.data.length,
+    set: (value) => {
+        if (value) {
+            selectedIds.value = props.users.data.map(item => item.id);
+        } else {
+            selectedIds.value = [];
+        }
+    }
+});
+
+const confirmBulkDeleteRef = ref<InstanceType<typeof ConfirmDialog> | null>(null);
+
+const bulkDelete = async () => {
+    const confirmed = await confirmBulkDeleteRef.value?.open();
+
+    if (!confirmed) {
+        return;
+    }
+
+    router.delete(bulkDestroy().url, {
+        data: { ids: selectedIds.value },
+        onSuccess: (page) => {
+            if (isFlashErrorPage(page)) {
+                return;
+            }
+
+            selectedIds.value = [];
+        },
+        onError: (errors) => {
+            toast.error(
+                firstVisitErrorMessage(
+                    errors as Record<string, string | string[]>,
+                    'Gagal menghapus akun. Periksa data lalu coba lagi.',
+                ),
+            );
+        },
+    });
+};
 
 const resetUserPassword = (user: User) => {
     if (!window.confirm(`Reset password untuk ${user.name}?`)) {
@@ -28,6 +78,28 @@ const toggleUserStatus = (user: User) => {
     }
 
     router.patch(toggleActive(user).url);
+};
+
+const applyFilters = () => {
+    router.get(
+        index().url,
+        {
+            search: search.value || undefined,
+            role: role.value || undefined,
+            status: status.value || undefined,
+        },
+        {
+            preserveState: true,
+            replace: true,
+        }
+    );
+};
+
+const resetFilters = () => {
+    search.value = '';
+    role.value = '';
+    status.value = '';
+    applyFilters();
 };
 </script>
 
@@ -54,36 +126,59 @@ const toggleUserStatus = (user: User) => {
             <!-- Search Box -->
             <div class="lg:col-span-5 bg-surface-container-lowest p-2 rounded-xl shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-surface-container-highest flex items-center relative">
                 <span class="material-symbols-outlined absolute left-4 text-outline">search</span>
-                <input class="w-full pl-10 pr-4 py-2 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder:text-outline-variant outline-none" placeholder="Search by name, username or email..." type="text" />
+                <input
+                    v-model="search"
+                    class="w-full pl-10 pr-4 py-2 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder:text-outline-variant outline-none"
+                    placeholder="Search by name, username or email..."
+                    type="text"
+                    @keyup.enter="applyFilters"
+                />
             </div>
             <!-- Filters -->
             <div class="lg:col-span-7 bg-surface-container-lowest p-2 rounded-xl shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-surface-container-highest flex flex-wrap items-center gap-2">
                 <div class="relative flex-1 min-w-[140px]">
-                    <select class="w-full appearance-none bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md px-4 py-2 pr-10 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
-                        <option>Role (All)</option>
-                        <option>Admin</option>
-                        <option>Teacher</option>
-                        <option>Student</option>
+                    <select v-model="role" class="w-full appearance-none bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md px-4 py-2 pr-10 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" @change="applyFilters">
+                        <option value="">Role (All)</option>
+                        <option value="admin">Admin</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
                     </select>
                     <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
                 </div>
                 <div class="relative flex-1 min-w-[140px]">
-                    <select class="w-full appearance-none bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md px-4 py-2 pr-10 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
-                        <option>Status (All)</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
+                    <select v-model="status" class="w-full appearance-none bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md px-4 py-2 pr-10 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" @change="applyFilters">
+                        <option value="">Status (All)</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                     <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
                 </div>
+                <button class="px-3 py-2 rounded-lg border" type="button" @click="applyFilters">Apply</button>
+                <button class="px-3 py-2 rounded-lg border" type="button" @click="resetFilters">Reset</button>
             </div>
         </div>
 
         <!-- Data Table Container -->
         <div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-surface-container-highest overflow-hidden flex flex-col">
+            
+            <!-- Bulk Actions Toolbar -->
+            <div v-if="selectedIds.length > 0" class="bg-primary-container/20 px-6 py-3 border-b border-surface-container-highest flex items-center justify-between">
+                <span class="font-medium text-on-surface text-sm">{{ selectedIds.length }} data terpilih</span>
+                <div class="flex gap-2">
+                    <button @click="bulkDelete" class="font-label-sm text-label-sm text-error bg-error-container hover:bg-error-container-hover px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                        Hapus Terpilih
+                    </button>
+                </div>
+            </div>
+
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[900px]">
                     <thead>
                         <tr class="bg-surface-container-low border-b border-surface-container-highest">
+                            <th class="py-3 px-6 w-12 text-center">
+                                <input type="checkbox" v-model="allSelected" class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4 cursor-pointer" />
+                            </th>
                             <th class="font-table-header text-table-header text-on-surface-variant py-3 px-6 uppercase tracking-wider">User Details</th>
                             <th class="font-table-header text-table-header text-on-surface-variant py-3 px-6 uppercase tracking-wider w-40">Role</th>
                             <th class="font-table-header text-table-header text-on-surface-variant py-3 px-6 uppercase tracking-wider w-48">Last Login</th>
@@ -92,7 +187,10 @@ const toggleUserStatus = (user: User) => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-surface-container-highest">
-                        <tr v-for="(user, index) in users.data" :key="user.id" :class="index % 2 === 0 ? 'bg-surface-container-lowest' : 'bg-surface-container-low/40'" class="hover:bg-surface-bright transition-colors group">
+                        <tr v-for="(user, index) in users.data" :key="user.id" :class="[index % 2 === 0 ? 'bg-surface-container-lowest' : 'bg-surface-container-low/40', selectedIds.includes(user.id) ? 'bg-primary-container/10' : '']" class="hover:bg-surface-bright transition-colors group">
+                            <td class="py-4 px-6 text-center">
+                                <input type="checkbox" :value="user.id" v-model="selectedIds" class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4 cursor-pointer" />
+                            </td>
                             <td class="font-body-md text-body-md text-on-surface py-4 px-6">
                                 <div class="flex items-center gap-3">
                                     <div :class="user.roles?.includes('admin') ? 'bg-error-container text-on-error-container' : user.roles?.includes('teacher') ? 'bg-tertiary-container text-on-tertiary-container' : 'bg-primary-container text-on-primary-container'" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm uppercase">
@@ -121,37 +219,34 @@ const toggleUserStatus = (user: User) => {
                             </td>
                             <td class="py-4 px-6 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    <Link :href="show(user).url" class="p-1.5 text-outline hover:text-primary transition-colors rounded-md hover:bg-surface-container" title="Lihat Detail"><span class="material-symbols-outlined text-[20px]">visibility</span></Link>
                                     <button @click="resetUserPassword(user)" class="p-1.5 text-outline hover:text-primary transition-colors rounded-md hover:bg-surface-container" title="Reset Password"><span class="material-symbols-outlined text-[20px]">key</span></button>
                                     <button @click="toggleUserStatus(user)" class="p-1.5 text-outline hover:text-error transition-colors rounded-md hover:bg-surface-container" :title="user.is_active ? 'Deactivate User' : 'Activate User'"><span class="material-symbols-outlined text-[20px]">{{ user.is_active ? 'block' : 'check_circle' }}</span></button>
                                 </div>
                             </td>
                         </tr>
                         <tr v-if="users.data.length === 0">
-                            <td colspan="5" class="text-center py-8 text-on-surface-variant">No accounts found.</td>
+                            <td colspan="6" class="text-center py-8 text-on-surface-variant">No accounts found.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             
-            <div class="bg-surface-container-lowest px-6 py-4 border-t border-surface-container-highest flex items-center justify-between">
-                <span class="font-body-md text-body-md text-on-surface-variant">Showing <span class="font-medium text-on-surface">{{ users.from || 0 }}</span> to <span class="font-medium text-on-surface">{{ users.to || 0 }}</span> of <span class="font-medium text-on-surface">{{ users.total }}</span> accounts</span>
-                <div class="flex items-center gap-1">
-                    <Link
-                        v-for="(link, i) in users.links"
-                        :key="i"
-                        :href="link.url || '#'"
-                        :class="[
-                            'w-8 h-8 flex items-center justify-center rounded transition-colors',
-                            link.active ? 'bg-primary text-on-primary font-medium' : 'hover:bg-surface-container text-on-surface font-body-md text-body-md',
-                            !link.url ? 'opacity-50 cursor-not-allowed' : ''
-                        ]"
-                    >
-                        <span
-                            v-html="link.label.replace('Previous', '<span class=\'material-symbols-outlined text-[20px]\'>chevron_left</span>').replace('Next', '<span class=\'material-symbols-outlined text-[20px]\'>chevron_right</span>')"
-                        />
-                    </Link>
-                </div>
-            </div>
+            <TablePagination
+                :from="users.from"
+                :to="users.to"
+                :total="users.total"
+                :links="users.links"
+                item-label="akun"
+            />
         </div>
     </div>
+    <ConfirmDialog
+        ref="confirmBulkDeleteRef"
+        title="Hapus Massal Akun"
+        :message="`${selectedIds.length} akun terpilih akan dihapus secara permanen. Apakah Anda yakin?`"
+        confirm-text="Ya, Hapus Semua"
+        cancel-text="Batal"
+        variant="danger"
+    />
 </template>

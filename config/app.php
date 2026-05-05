@@ -16,6 +16,13 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
+    | Ditampilkan pada API profil mobile (bukan data akademik dari database).
+    */
+    'school_id' => env('APP_SCHOOL_ID', 1),
+
+    'school_name' => env('APP_SCHOOL_NAME', env('APP_NAME', 'Laravel')),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
@@ -66,6 +73,19 @@ return [
     */
 
     'timezone' => 'UTC',
+
+    /*
+    |--------------------------------------------------------------------------
+    | School timezone (attendance & academic calendar)
+    |--------------------------------------------------------------------------
+    |
+    | Used when parsing client_time, deriving calendar dates, matching schedules,
+    | and evaluating attendance windows. Keep in sync with how schools record
+    | wall-clock times in schedules and calendar events.
+    |
+    */
+
+    'school_timezone' => env('SCHOOL_TIMEZONE', 'Asia/Jakarta'),
 
     /*
     |--------------------------------------------------------------------------

@@ -38,7 +38,7 @@ class ScheduleConflictTest extends TestCase
     }
 
     #[Test]
-    public function testAdminCanCreateScheduleWithoutConflict(): void
+    public function test_admin_can_create_schedule_without_conflict(): void
     {
         $response = $this->actingAs($this->admin)->post(route('admin.schedules.store'), [
             'school_year_id' => $this->schoolYear->id,
@@ -60,7 +60,7 @@ class ScheduleConflictTest extends TestCase
     }
 
     #[Test]
-    public function testTeacherScheduleConflictIsRejected(): void
+    public function test_teacher_schedule_conflict_is_rejected(): void
     {
         // Create existing schedule
         Schedule::factory()->create([
@@ -74,7 +74,10 @@ class ScheduleConflictTest extends TestCase
             'end_time' => '09:00',
         ]);
 
-        $otherClass = ClassRoom::factory()->recycle($this->schoolYear)->create();
+        $otherClass = ClassRoom::factory()->recycle($this->schoolYear)->create([
+            'name' => '10Z-'.uniqid(),
+            'level' => 10,
+        ]);
 
         // Try to create overlapping schedule for same teacher
         $response = $this->actingAs($this->admin)->post(route('admin.schedules.store'), [
@@ -92,7 +95,7 @@ class ScheduleConflictTest extends TestCase
     }
 
     #[Test]
-    public function testClassScheduleConflictIsRejected(): void
+    public function test_class_schedule_conflict_is_rejected(): void
     {
         // Create existing schedule
         Schedule::factory()->create([
@@ -124,7 +127,7 @@ class ScheduleConflictTest extends TestCase
     }
 
     #[Test]
-    public function testAdjacentSchedulesDoNotConflict(): void
+    public function test_adjacent_schedules_do_not_conflict(): void
     {
         // Create existing schedule 08:00-09:00
         Schedule::factory()->create([
@@ -155,7 +158,7 @@ class ScheduleConflictTest extends TestCase
     }
 
     #[Test]
-    public function testDifferentDayDoesNotConflict(): void
+    public function test_different_day_does_not_conflict(): void
     {
         // Create existing schedule on Monday
         Schedule::factory()->create([
@@ -185,7 +188,7 @@ class ScheduleConflictTest extends TestCase
     }
 
     #[Test]
-    public function testDifferentSemesterDoesNotConflict(): void
+    public function test_different_semester_does_not_conflict(): void
     {
         // Create existing schedule in semester 1
         Schedule::factory()->create([
@@ -215,7 +218,7 @@ class ScheduleConflictTest extends TestCase
     }
 
     #[Test]
-    public function testEndTimeMustBeAfterStartTime(): void
+    public function test_end_time_must_be_after_start_time(): void
     {
         $response = $this->actingAs($this->admin)->post(route('admin.schedules.store'), [
             'school_year_id' => $this->schoolYear->id,

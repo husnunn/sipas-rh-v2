@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesAdminDeletes;
 use App\Http\Controllers\Controller;
 use App\Models\Subject;
 use App\Models\TeacherProfile;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,15 +17,42 @@ use Inertia\Response;
 
 class TeacherController extends Controller
 {
-    public function index(): Response
+    use HandlesAdminDeletes;
+
+    public function index(Request $request): Response
     {
-        $teachers = TeacherProfile::query()
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:150'],
+            'account_status' => ['nullable', 'string', 'in:active,inactive'],
+        ]);
+
+        $search = trim((string) ($filters['search'] ?? ''));
+
+        $query = TeacherProfile::query()
             ->with(['user', 'subjects'])
-            ->orderByDesc('id')
-            ->paginate(25);
+            ->when($search !== '', function (Builder $q) use ($search): void {
+                $needle = '%'.$search.'%';
+                $q->where(function (Builder $q) use ($needle): void {
+                    $q->where('nip', 'like', $needle)
+                        ->orWhere('full_name', 'like', $needle)
+                        ->orWhereHas('user', fn (Builder $uq) => $uq->where('name', 'like', $needle)
+                            ->orWhere('username', 'like', $needle));
+                });
+            })
+            ->when(($filters['account_status'] ?? '') === 'active', function (Builder $q): void {
+                $q->whereHas('user', fn (Builder $uq) => $uq->where('is_active', true));
+            })
+            ->when(($filters['account_status'] ?? '') === 'inactive', function (Builder $q): void {
+                $q->whereHas('user', fn (Builder $uq) => $uq->where('is_active', false));
+            })
+            ->orderByDesc('id');
 
         return Inertia::render('Admin/Teachers/Index', [
-            'teachers' => $teachers,
+            'teachers' => $query->paginate(25)->withQueryString(),
+            'filters' => [
+                'search' => $search,
+                'account_status' => $filters['account_status'] ?? null,
+            ],
         ]);
     }
 
@@ -51,14 +80,14 @@ class TeacherController extends Controller
             'subject_ids.*' => [
                 'exists:subjects,id',
                 function ($attribute, $value, $fail) {
-                    $count = \Illuminate\Support\Facades\DB::table('teacher_subjects')
+                    $count = DB::table('teacher_subjects')
                         ->where('subject_id', $value)
                         ->count();
                     if ($count >= 2) {
-                        $subject = \App\Models\Subject::find($value);
+                        $subject = Subject::find($value);
                         $fail("Mata pelajaran {$subject->name} sudah maksimal diajar oleh 2 guru.");
                     }
-                }
+                },
             ],
         ]);
 
@@ -111,10 +140,10 @@ class TeacherController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:150'],
-            'username' => ['required', 'string', 'max:50', 'unique:users,username,' . $teacher->user_id],
-            'email' => ['nullable', 'email', 'max:255', 'unique:users,email,' . $teacher->user_id],
+            'username' => ['required', 'string', 'max:50', 'unique:users,username,'.$teacher->user_id],
+            'email' => ['nullable', 'email', 'max:255', 'unique:users,email,'.$teacher->user_id],
             'password' => ['nullable', 'string', 'min:6'],
-            'nip' => ['nullable', 'string', 'max:30', 'unique:teacher_profiles,nip,' . $teacher->id],
+            'nip' => ['nullable', 'string', 'max:30', 'unique:teacher_profiles,nip,'.$teacher->id],
             'gender' => ['nullable', 'string', 'max:10'],
             'phone' => ['nullable', 'string', 'max:20'],
             'address' => ['nullable', 'string'],
@@ -122,15 +151,15 @@ class TeacherController extends Controller
             'subject_ids.*' => [
                 'exists:subjects,id',
                 function ($attribute, $value, $fail) use ($teacher) {
-                    $count = \Illuminate\Support\Facades\DB::table('teacher_subjects')
+                    $count = DB::table('teacher_subjects')
                         ->where('subject_id', $value)
                         ->where('teacher_profile_id', '!=', $teacher->id)
                         ->count();
                     if ($count >= 2) {
-                        $subject = \App\Models\Subject::find($value);
+                        $subject = Subject::find($value);
                         $fail("Mata pelajaran {$subject->name} sudah maksimal diajar oleh 2 guru.");
                     }
-                }
+                },
             ],
         ]);
 
@@ -159,9 +188,36 @@ class TeacherController extends Controller
 
     public function destroy(TeacherProfile $teacher): RedirectResponse
     {
-        $teacher->user()->delete();
+        return $this->tryDelete(
+            function () use ($teacher): void {
+                User::purgePasswordResetAuditsForUserIds([$teacher->user_id]);
+                $teacher->user()->delete();
+            },
+            'admin.teachers.index',
+            ['type' => 'success', 'message' => 'Data guru berhasil dihapus.'],
+            'Gagal menghapus data guru. Silakan coba lagi.',
+        );
+    }
 
-        return redirect()->route('admin.teachers.index')
-            ->with('flash', ['type' => 'success', 'message' => 'Data guru berhasil dihapus.']);
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:teacher_profiles,id'],
+        ]);
+
+        return $this->tryDelete(
+            function () use ($validated): void {
+                $userIds = TeacherProfile::query()
+                    ->whereIn('id', $validated['ids'])
+                    ->pluck('user_id')
+                    ->all();
+                User::purgePasswordResetAuditsForUserIds($userIds);
+                User::query()->whereIn('id', $userIds)->delete();
+            },
+            'admin.teachers.index',
+            ['type' => 'success', 'message' => count($validated['ids']).' data guru berhasil dihapus.'],
+            'Gagal menghapus data guru. Silakan coba lagi.',
+        );
     }
 }

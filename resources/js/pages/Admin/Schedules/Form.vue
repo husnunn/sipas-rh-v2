@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Head, useForm, Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { store, update, index } from '@/actions/App/Http/Controllers/Admin/ScheduleController';
 import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import type { ClassRoom, Schedule, SchoolYear, Subject, TeacherProfile } from '@/types/models';
-import { computed } from 'vue';
 
 defineOptions({ layout: AppSidebarLayout });
 
@@ -48,6 +48,7 @@ const onSubjectChange = () => {
         const stillValid = filteredTeachers.value.some(
             (t) => t.id === Number(form.teacher_profile_id)
         );
+
         if (!stillValid) {
             form.teacher_profile_id = '';
         }
