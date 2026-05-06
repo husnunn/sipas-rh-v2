@@ -227,11 +227,7 @@ const handleLogout = (): void => {
                 <div
                     class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20"
                 >
-                    <img
-                        alt="Robithotul Hikmah Logo"
-                        class="h-8 w-8 rounded-full object-cover"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUuIlGqGOdlrvgN6e36EOiXpKfApLFGHVRyhk5UWo10_7r1ZVdhiC1yFTwX_8PiRD2Afz4Es5QuIvzfwesQqNIJpHf8Wbhc3wKMRUbQmjn3n40EVXyR0yKDTlp-EXtS5og9bLGfH-jSrmEdPOXEhwU8c2-HzAtVDFMK3YpMvJ_L9CQRzekdv19iz14ZqT-tGz7l-dmvCWz0fbh7XpuptbKb0AXpueoYZx_nfiUgtJ4Sc7dyskMAViMlItbugLrJumWJ9xm_igjFrs"
-                    />
+                    <img alt="Robithotul Hikmah Logo" class="h-8 w-8 rounded-full object-cover" src="../../../public/logo_new.png" />
                 </div>
                 <div v-if="showFullNav" class="min-w-0 flex-1 lg:block">
                     <h1 class="truncate text-lg font-black tracking-tight text-white">

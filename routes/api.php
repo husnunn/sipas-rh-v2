@@ -38,6 +38,8 @@ Route::prefix('v1/teacher')->name('api.teacher.')->group(function () {
     Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
         Route::get('/me', [TeacherProfileController::class, 'me'])
             ->name('me');
+        Route::get('/schedule/by-day', [TeacherScheduleController::class, 'byDay'])
+            ->name('schedule.by-day');
         Route::get('/schedule', [TeacherScheduleController::class, 'index'])
             ->name('schedule.index');
         Route::post('/attendance/check-in', [TeacherAttendanceController::class, 'checkIn'])

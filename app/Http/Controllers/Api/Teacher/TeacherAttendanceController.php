@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Api\Teacher;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Attendance\StoreAttendanceRequest;
 use App\Http\Resources\AttendanceRecordResource;
-use App\Http\Resources\AttendanceSitePickerApiResource;
 use App\Models\AttendanceRecord;
-use App\Models\AttendanceSite;
 use App\Services\Attendance\AttendanceDecisionService;
 use App\Services\Attendance\AttendanceEligibilityService;
 use App\Services\Attendance\AttendanceEvidenceValidationService;
+use App\Services\Attendance\MobileAttendanceSitePicker;
 use App\Services\Attendance\SchoolAttendanceTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -59,13 +58,9 @@ class TeacherAttendanceController extends Controller
             ->orderByDesc('attendance_at')
             ->get();
 
-        $sites = AttendanceSite::query()
-            ->forApiPicker()
-            ->get(['id', 'name', 'latitude', 'longitude', 'radius_m']);
-
         return response()->json([
             'data' => AttendanceRecordResource::collection($records),
-            'attendance_sites' => AttendanceSitePickerApiResource::collection($sites)->resolve(),
+            'attendance_sites' => MobileAttendanceSitePicker::forTeacher(),
         ]);
     }
 

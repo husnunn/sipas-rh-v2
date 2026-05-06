@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class StudentProfile extends Model
 {
@@ -41,6 +42,16 @@ class StudentProfile extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function extension(): HasOne
+    {
+        return $this->hasOne(StudentProfileExtension::class);
+    }
+
+    public function parents(): HasMany
+    {
+        return $this->hasMany(StudentParent::class);
     }
 
     public function classes(): BelongsToMany

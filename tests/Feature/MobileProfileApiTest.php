@@ -67,6 +67,8 @@ class MobileProfileApiTest extends TestCase
             ->assertJsonPath('data.role', 'student')
             ->assertJsonPath('data.name', 'Siswa Satu')
             ->assertJsonPath('data.email', 'siswa@test.test')
+            ->assertJsonPath('data.user.roles.0', 'student')
+            ->assertJsonPath('data.profile.id', $profile->id)
             ->assertJsonPath('data.class.id', $classRoom->id)
             ->assertJsonPath('data.class.name', 'X RPL 1')
             ->assertJsonPath('data.school.id', $schoolYear->id)
@@ -86,6 +88,8 @@ class MobileProfileApiTest extends TestCase
         $this->getJson('/api/mobile/profile')
             ->assertOk()
             ->assertJsonPath('data.role', 'teacher')
+            ->assertJsonPath('data.user.roles.0', 'teacher')
+            ->assertJsonPath('data.profile.id', $teacher->teacherProfile->id)
             ->assertJsonPath('data.class', null)
             ->assertJsonPath('data.school.id', 99)
             ->assertJsonPath('data.school.name', 'Sekolah Default');

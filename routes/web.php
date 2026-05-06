@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\StudentAttendanceManualStatusController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Admin\WilayahController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -33,6 +34,14 @@ Route::middleware(['auth', 'verified', 'role:admin'])
             ->name('students.bulk-destroy');
         Route::get('students/import', [StudentController::class, 'importForm'])->name('students.import');
         Route::post('students/import', [StudentController::class, 'import'])->name('students.import.store');
+        Route::prefix('wilayah')->name('wilayah.')->group(function () {
+            Route::get('/provinces', [WilayahController::class, 'provinces'])->name('provinces');
+            Route::get('/regencies', [WilayahController::class, 'regencies'])->name('regencies');
+            Route::get('/districts', [WilayahController::class, 'districts'])->name('districts');
+            Route::get('/villages', [WilayahController::class, 'villages'])->name('villages');
+            Route::get('/village-context', [WilayahController::class, 'villageContext'])->name('village-context');
+        });
+
         Route::resource('students', StudentController::class);
         Route::get('/students/{student}/attendance-export', [StudentController::class, 'exportAttendance'])
             ->name('students.attendance-export');

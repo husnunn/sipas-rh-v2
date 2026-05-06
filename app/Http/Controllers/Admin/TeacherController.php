@@ -6,12 +6,16 @@ use App\Http\Controllers\Concerns\HandlesAdminDeletes;
 use App\Http\Controllers\Controller;
 use App\Models\Subject;
 use App\Models\TeacherProfile;
+use App\Models\TeacherProfileExtension;
 use App\Models\User;
+use App\Services\Wilayah\WilayahAddressSnapshot;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -89,9 +93,10 @@ class TeacherController extends Controller
                     }
                 },
             ],
+            ...$this->teacherExtensionValidationRules(),
         ]);
 
-        DB::transaction(function () use ($validated): void {
+        DB::transaction(function () use ($validated, $request): void {
             $user = User::create([
                 'name' => $validated['name'],
                 'username' => $validated['username'],
@@ -110,6 +115,8 @@ class TeacherController extends Controller
             ]);
 
             $teacher->subjects()->sync($validated['subject_ids'] ?? []);
+
+            $this->syncTeacherExtensionFromRequest($teacher, $request, $validated);
         });
 
         return redirect()->route('admin.teachers.index')
@@ -118,7 +125,7 @@ class TeacherController extends Controller
 
     public function show(TeacherProfile $teacher): Response
     {
-        $teacher->load(['user', 'subjects']);
+        $teacher->load(['user', 'subjects', 'extension']);
 
         return Inertia::render('Admin/Teachers/Show', [
             'teacher' => $teacher,
@@ -127,7 +134,7 @@ class TeacherController extends Controller
 
     public function edit(TeacherProfile $teacher): Response
     {
-        $teacher->load(['user', 'subjects']);
+        $teacher->load(['user', 'subjects', 'extension']);
 
         return Inertia::render('Admin/Teachers/Form', [
             'mode' => 'edit',
@@ -161,9 +168,10 @@ class TeacherController extends Controller
                     }
                 },
             ],
+            ...$this->teacherExtensionValidationRules(),
         ]);
 
-        DB::transaction(function () use ($teacher, $validated): void {
+        DB::transaction(function () use ($teacher, $validated, $request): void {
             $teacher->user->update([
                 'name' => $validated['name'],
                 'username' => $validated['username'],
@@ -180,10 +188,90 @@ class TeacherController extends Controller
             ]);
 
             $teacher->subjects()->sync($validated['subject_ids'] ?? []);
+
+            $this->syncTeacherExtensionFromRequest($teacher, $request, $validated);
         });
 
         return redirect()->route('admin.teachers.index')
             ->with('flash', ['type' => 'success', 'message' => 'Data guru berhasil diperbarui.']);
+    }
+
+    /**
+     * @return array<string, array<int, mixed|string|\Closure>>
+     */
+    private function teacherExtensionValidationRules(): array
+    {
+        return [
+            'profile_photo' => ['nullable', 'image', 'max:5120'],
+            'remove_profile_photo' => ['sometimes', 'boolean'],
+            'birth_date' => ['nullable', 'date'],
+            'birth_place' => ['nullable', 'string', 'max:120'],
+            'street_address' => ['nullable', 'string', 'max:2000'],
+            'rt' => ['nullable', 'string', 'max:10'],
+            'rw' => ['nullable', 'string', 'max:10'],
+            'village' => ['nullable', 'string', 'max:120'],
+            'district' => ['nullable', 'string', 'max:120'],
+            'city' => ['nullable', 'string', 'max:120'],
+            'province' => ['nullable', 'string', 'max:120'],
+            'postal_code' => ['nullable', 'string', 'max:10'],
+            'wilayah_village_id' => ['nullable', 'string', 'size:10', 'exists:villages,id'],
+            'religion' => ['nullable', 'string', 'max:50'],
+            'blood_type' => ['nullable', 'string', 'max:5'],
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function syncTeacherExtensionFromRequest(TeacherProfile $teacher, Request $request, array $validated): void
+    {
+        $extension = TeacherProfileExtension::query()->firstOrNew(['teacher_profile_id' => $teacher->id]);
+        $data = Arr::only($validated, [
+            'birth_date',
+            'birth_place',
+            'street_address',
+            'rt',
+            'rw',
+            'village',
+            'district',
+            'city',
+            'province',
+            'postal_code',
+            'religion',
+            'blood_type',
+        ]);
+
+        $wilayahVillageId = $validated['wilayah_village_id'] ?? null;
+        if (is_string($wilayahVillageId) && $wilayahVillageId !== '') {
+            $snapshot = WilayahAddressSnapshot::fromVillageId($wilayahVillageId);
+            if ($snapshot !== null) {
+                $data = array_merge($data, $snapshot);
+            }
+        } else {
+            $data['wilayah_village_id'] = null;
+        }
+
+        $extension->fill($data);
+
+        $remove = filter_var($validated['remove_profile_photo'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        if ($request->hasFile('profile_photo')) {
+            $uploaded = $request->file('profile_photo');
+            \assert($uploaded !== null && $uploaded->isValid());
+
+            if ($extension->profile_photo_path !== null && $extension->profile_photo_path !== '' && Storage::disk('public')->exists($extension->profile_photo_path)) {
+                Storage::disk('public')->delete($extension->profile_photo_path);
+            }
+
+            $extension->profile_photo_path = $uploaded->store('teacher-profile-extensions/'.$teacher->id, 'public');
+        } elseif ($remove && ($extension->profile_photo_path !== null && $extension->profile_photo_path !== '')) {
+            if (Storage::disk('public')->exists($extension->profile_photo_path)) {
+                Storage::disk('public')->delete($extension->profile_photo_path);
+            }
+            $extension->profile_photo_path = null;
+        }
+
+        $extension->save();
     }
 
     public function destroy(TeacherProfile $teacher): RedirectResponse

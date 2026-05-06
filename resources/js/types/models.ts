@@ -16,6 +16,25 @@ export interface Subject {
     is_active: boolean;
 }
 
+export interface TeacherProfileExtension {
+    id: number;
+    teacher_profile_id: number;
+    profile_photo_path?: string | null;
+    birth_date?: string | null;
+    birth_place?: string | null;
+    street_address?: string | null;
+    rt?: string | null;
+    rw?: string | null;
+    village?: string | null;
+    district?: string | null;
+    city?: string | null;
+    province?: string | null;
+    postal_code?: string | null;
+    wilayah_village_id?: string | null;
+    religion?: string | null;
+    blood_type?: string | null;
+}
+
 export interface TeacherProfile {
     id: number;
     user_id: number;
@@ -24,8 +43,39 @@ export interface TeacherProfile {
     gender?: string | null;
     phone?: string | null;
     address?: string | null;
+    extension?: TeacherProfileExtension | null;
     user?: AuthUser;
     subjects?: Subject[];
+}
+
+export interface StudentProfileExtension {
+    id: number;
+    student_profile_id: number;
+    profile_photo_path?: string | null;
+    street_address?: string | null;
+    rt?: string | null;
+    rw?: string | null;
+    village?: string | null;
+    district?: string | null;
+    city?: string | null;
+    province?: string | null;
+    postal_code?: string | null;
+    /** Kode desa/kelurahan BPS (10 digit), FK ke `villages.id`. */
+    wilayah_village_id?: string | null;
+    religion?: string | null;
+    blood_type?: string | null;
+}
+
+/** Orang tua wali (ayah/ibu) untuk data tambahan di admin. */
+export interface StudentParentRow {
+    id: number;
+    student_profile_id: number;
+    relation: 'mother' | 'father';
+    full_name?: string | null;
+    occupation?: string | null;
+    monthly_income_band?: string | null;
+    nik?: string | null;
+    birth_date?: string | null;
 }
 
 export interface ClassRoom {
@@ -52,6 +102,8 @@ export interface StudentProfile {
     address?: string | null;
     parent_name?: string | null;
     parent_phone?: string | null;
+    extension?: StudentProfileExtension | null;
+    parents?: StudentParentRow[];
     user?: AuthUser;
     classes?: ClassRoom[];
     attendance_records?: AttendanceRecord[];

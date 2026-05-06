@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Edit Teacher - Robithotul Hikmah</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f8f9fa;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #bfc9c3;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #707974;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e3e4",
+                        "primary-fixed-dim": "#95d3ba",
+                        "on-surface-variant": "#404944",
+                        "on-tertiary-container": "#4e3d00",
+                        "outline": "#707974",
+                        "on-secondary-container": "#446a5e",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#a7cfc0",
+                        "primary": "#003527",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#284e42",
+                        "on-background": "#191c1d",
+                        "tertiary-container": "#cca72f",
+                        "on-tertiary-fixed": "#241a00",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f8f9fa",
+                        "primary-container": "#064e3b",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "on-primary-fixed": "#002117",
+                        "inverse-surface": "#2e3132",
+                        "on-surface": "#191c1d",
+                        "on-primary-container": "#80bea6",
+                        "secondary": "#406659",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#b0f0d6",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f4f5",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#c2ebdc",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d9dadb",
+                        "surface-tint": "#2b6954",
+                        "secondary-container": "#bfe9d9",
+                        "error": "#ba1a1a",
+                        "surface": "#f8f9fa",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "tertiary-fixed": "#ffe088",
+                        "tertiary": "#735c00",
+                        "inverse-primary": "#95d3ba",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "outline-variant": "#bfc9c3",
+                        "on-secondary-fixed": "#002018"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "sidebar-width": "260px",
+                        "gutter": "16px",
+                        "stack-lg": "24px",
+                        "stack-sm": "8px",
+                        "container-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "table-header": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h2": ["Inter"]
+                    },
+                    "fontSize": {
+                        "table-header": ["13px", { "lineHeight": "18px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "h3": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "h1": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h2": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-background text-on-background font-sans antialiased h-screen overflow-hidden flex">
+    <!-- SideNavBar -->
+    <aside
+        class="bg-primary-container dark:bg-primary-container fixed left-0 top-0 h-full w-sidebar-width shadow-lg flex flex-col py-container-padding z-50">
+        <div class="px-gutter mb-stack-lg flex items-center gap-stack-sm">
+            <div
+                class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary-container font-bold">
+                RH
+            </div>
+            <div>
+                <h2 class="font-h3 text-h3 text-on-primary-container m-0">Robithotul Hikmah</h2>
+                <p class="font-label-sm text-label-sm text-on-primary-container/80 m-0">Admin Portal</p>
+            </div>
+        </div>
+        <nav class="flex-1 overflow-y-auto px-unit space-y-unit">
+            <!-- Dashboard -->
+            <a class="flex items-center gap-stack-sm text-on-primary-container/80 hover:text-on-primary px-4 py-3 hover:bg-primary/50 dark:hover:bg-primary/50 transition-all duration-200 ease-in-out group rounded-xl"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+                <span class="font-label-sm text-label-sm">Dashboard</span>
+            </a>
+            <!-- Students -->
+            <a class="flex items-center gap-stack-sm text-on-primary-container/80 hover:text-on-primary px-4 py-3 hover:bg-primary/50 dark:hover:bg-primary/50 transition-all duration-200 ease-in-out group rounded-xl"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+                <span class="font-label-sm text-label-sm">Students</span>
+            </a>
+            <!-- Teachers (Active) -->
+            <a class="flex items-center gap-stack-sm bg-primary dark:bg-primary text-on-primary rounded-xl px-4 py-3 hover:bg-primary/50 dark:hover:bg-primary/50 transition-all duration-200 ease-in-out"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="person">person</span>
+                <span class="font-label-sm text-label-sm">Teachers</span>
+            </a>
+            <!-- Classes -->
+            <a class="flex items-center gap-stack-sm text-on-primary-container/80 hover:text-on-primary px-4 py-3 hover:bg-primary/50 dark:hover:bg-primary/50 transition-all duration-200 ease-in-out group rounded-xl"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="door_open">door_open</span>
+                <span class="font-label-sm text-label-sm">Classes</span>
+            </a>
+            <!-- Subjects -->
+            <a class="flex items-center gap-stack-sm text-on-primary-container/80 hover:text-on-primary px-4 py-3 hover:bg-primary/50 dark:hover:bg-primary/50 transition-all duration-200 ease-in-out group rounded-xl"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="book">book</span>
+                <span class="font-label-sm text-label-sm">Subjects</span>
+            </a>
+            <!-- Schedules -->
+            <a class="flex items-center gap-stack-sm text-on-primary-container/80 hover:text-on-primary px-4 py-3 hover:bg-primary/50 dark:hover:bg-primary/50 transition-all duration-200 ease-in-out group rounded-xl"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+                <span class="font-label-sm text-label-sm">Schedules</span>
+            </a>
+            <!-- Accounts -->
+            <a class="flex items-center gap-stack-sm text-on-primary-container/80 hover:text-on-primary px-4 py-3 hover:bg-primary/50 dark:hover:bg-primary/50 transition-all duration-200 ease-in-out group rounded-xl"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="manage_accounts">manage_accounts</span>
+                <span class="font-label-sm text-label-sm">Accounts</span>
+            </a>
+            <!-- Settings -->
+            <a class="flex items-center gap-stack-sm text-on-primary-container/80 hover:text-on-primary px-4 py-3 hover:bg-primary/50 dark:hover:bg-primary/50 transition-all duration-200 ease-in-out group rounded-xl"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+                <span class="font-label-sm text-label-sm">Settings</span>
+            </a>
+        </nav>
+    </aside>
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col ml-[260px] min-h-screen">
+        <!-- TopNavBar -->
+        <header
+            class="bg-surface dark:bg-surface shadow-sm dark:shadow-none flex justify-between items-center px-gutter h-16 w-full z-40 sticky top-0">
+            <!-- Left side (Search - hidden on this specific page logic but keeping structure) -->
+            <div class="flex items-center">
+                <!-- Mobile menu button placeholder -->
+                <button
+                    class="md:hidden mr-gutter text-on-surface-variant hover:bg-surface-container transition-colors rounded-full p-2">
+                    <span class="material-symbols-outlined" data-icon="menu">menu</span>
+                </button>
+                <div class="font-h2 text-h2 text-primary dark:text-primary-fixed-dim">
+                    <!-- Brand Logo space if needed, handled in sidebar for desktop -->
+                </div>
+            </div>
+            <!-- Right side (Actions) -->
+            <div class="flex items-center gap-stack-sm">
+                <button
+                    class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors cursor-pointer active:scale-95 transition-transform p-2 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                </button>
+                <button
+                    class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors cursor-pointer active:scale-95 transition-transform p-2 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+                </button>
+            </div>
+        </header>
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-container-padding">
+            <div class="max-w-5xl mx-auto">
+                <!-- Page Header -->
+                <div class="mb-stack-lg flex items-center justify-between">
+                    <div>
+                        <h1 class="font-h1 text-h1 text-on-background m-0">Edit Data Guru</h1>
+                        <p class="font-body-md text-body-md text-on-surface-variant mt-1">Perbarui informasi akademik
+                            dan personal staf pengajar.</p>
+                    </div>
+                    <div
+                        class="flex items-center gap-stack-sm text-sm text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full border border-outline-variant">
+                        <span class="w-2 h-2 rounded-full bg-primary block"></span>
+                        Status: <span class="font-semibold text-on-surface">Aktif</span>
+                    </div>
+                </div>
+                <!-- Form Area -->
+                <form action="#" class="flex flex-col gap-stack-lg" method="POST">
+                    <!-- Tab Bar -->
+                    <div class="flex border-b border-outline-variant gap-stack-sm">
+                        <button
+                            class="tab-btn px-4 py-3 border-b-2 font-label-sm text-label-sm transition-colors border-primary text-primary bg-primary/10 flex items-center gap-2 rounded-t-lg"
+                            id="btn-tab-utama" onclick="switchTab('tab-utama')" type="button">
+                            <span class="material-symbols-outlined text-[20px]" data-icon="badge">badge</span>
+                            Data Utama
+                        </button>
+                        <button
+                            class="tab-btn px-4 py-3 border-b-2 font-label-sm text-label-sm transition-colors border-transparent text-on-surface-variant hover:bg-surface-container hover:text-on-surface flex items-center gap-2 rounded-t-lg"
+                            id="btn-tab-tambahan" onclick="switchTab('tab-tambahan')" type="button">
+                            <span class="material-symbols-outlined text-[20px]"
+                                data-icon="contact_page">contact_page</span>
+                            Data Tambahan
+                        </button>
+                    </div>
+                    <!-- Section 1: Data Utama Guru -->
+                    <div class="tab-content block bg-surface rounded-xl shadow-sm border border-surface-variant overflow-hidden"
+                        id="tab-utama">
+                        <div class="p-stack-lg">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+                                <!-- Field: NIP/NUPTK -->
+                                <div>
+                                    <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm"
+                                        for="nip">NIP/NUPTK</label>
+                                    <input
+                                        class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-2.5 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-shadow"
+                                        id="nip" name="nip" type="text" value="198507152010011005" />
+                                </div>
+                                <!-- Field: Full Name -->
+                                <div>
+                                    <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm"
+                                        for="fullName">Nama Lengkap &amp; Gelar</label>
+                                    <input
+                                        class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-2.5 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-shadow"
+                                        id="fullName" name="fullName" type="text" value="Ahmad Hidayat, M.Pd" />
+                                </div>
+                                <!-- Field: Gender -->
+                                <div>
+                                    <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm"
+                                        for="gender">Jenis Kelamin</label>
+                                    <div class="relative">
+                                        <select
+                                            class="w-full appearance-none rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-2.5 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-shadow"
+                                            id="gender" name="gender">
+                                            <option selected="" value="L">Laki-laki</option>
+                                            <option value="P">Perempuan</option>
+                                        </select>
+                                        <div
+                                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant">
+                                            <span class="material-symbols-outlined text-[20px]"
+                                                data-icon="expand_more">expand_more</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Field: Subject Specialization -->
+                                <div>
+                                    <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm"
+                                        for="subject">Spesialisasi Mata Pelajaran</label>
+                                    <div class="relative">
+                                        <select
+                                            class="w-full appearance-none rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-2.5 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-shadow"
+                                            id="subject" name="subject">
+                                            <option selected="" value="PAI">Pendidikan Agama Islam</option>
+                                            <option value="MTK">Matematika</option>
+                                            <option value="BHS_IND">Bahasa Indonesia</option>
+                                            <option value="IPA">Ilmu Pengetahuan Alam</option>
+                                        </select>
+                                        <div
+                                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant">
+                                            <span class="material-symbols-outlined text-[20px]"
+                                                data-icon="expand_more">expand_more</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Field: Employment Status -->
+                                <div class="md:col-span-2">
+                                    <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm"
+                                        for="empStatus">Status Kepegawaian</label>
+                                    <div class="flex gap-4">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input checked=""
+                                                class="text-primary focus:ring-primary w-4 h-4 border-outline-variant"
+                                                name="empStatus" type="radio" value="PNS" />
+                                            <span
+                                                class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">PNS</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="text-primary focus:ring-primary w-4 h-4 border-outline-variant"
+                                                name="empStatus" type="radio" value="GTY" />
+                                            <span
+                                                class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Guru
+                                                Tetap Yayasan</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                                class="text-primary focus:ring-primary w-4 h-4 border-outline-variant"
+                                                name="empStatus" type="radio" value="HONORER" />
+                                            <span
+                                                class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Honorer</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Section 2: Data Tambahan Guru -->
+                    <div class="tab-content hidden bg-surface rounded-xl shadow-sm border border-surface-variant overflow-hidden"
+                        id="tab-tambahan">
+                        <div class="p-stack-lg">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+                                <!-- Contact Fields (Left 2 columns) -->
+                                <div class="lg:col-span-2 flex flex-col gap-stack-lg">
+                                    <!-- Field: Address -->
+                                    <div>
+                                        <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm"
+                                            for="address">Alamat Lengkap</label>
+                                        <textarea
+                                            class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-2.5 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-shadow resize-y"
+                                            id="address" name="address"
+                                            rows="3">Jl. Merdeka No. 45, RT 02/RW 05, Kec. Jombang, Kab. Jombang, Jawa Timur</textarea>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+                                        <!-- Field: Email -->
+                                        <div>
+                                            <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm"
+                                                for="email">Email Aktif</label>
+                                            <div class="relative">
+                                                <div
+                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                                                    <span class="material-symbols-outlined text-[18px]"
+                                                        data-icon="mail">mail</span>
+                                                </div>
+                                                <input
+                                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest pl-10 pr-4 py-2.5 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-shadow"
+                                                    id="email" name="email" type="email"
+                                                    value="ahmad.hidayat@rhjombang.sch.id" />
+                                            </div>
+                                        </div>
+                                        <!-- Field: Phone -->
+                                        <div>
+                                            <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm"
+                                                for="phone">Nomor Telepon / WhatsApp</label>
+                                            <div class="relative">
+                                                <div
+                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                                                    <span class="material-symbols-outlined text-[18px]"
+                                                        data-icon="call">call</span>
+                                                </div>
+                                                <input
+                                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest pl-10 pr-4 py-2.5 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-shadow"
+                                                    id="phone" name="phone" type="tel" value="081234567890" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Photo Upload (Right 1 column) -->
+                                <div class="lg:col-span-1">
+                                    <label class="font-label-sm text-label-sm text-on-surface block mb-stack-sm">Foto
+                                        Profil</label>
+                                    <div
+                                        class="border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-lowest p-6 flex flex-col items-center justify-center text-center hover:border-primary hover:bg-surface transition-colors cursor-pointer group">
+                                        <!-- Current Photo Representation -->
+                                        <div
+                                            class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-surface shadow-sm relative group-hover:opacity-80 transition-opacity">
+                                            <img alt="Current Profile Photo" class="w-full h-full object-cover"
+                                                data-alt="A professional headshot of a middle-aged Indonesian male teacher. He is wearing a neat, dark green batik uniform that signifies an academic or administrative role. The background is a clean, well-lit modern office interior, subtly out of focus. Lighting is soft and natural, casting an approachable and authoritative mood consistent with a modern Islamic educational institution."
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzHQRDrXR7hGZwy2GJlfKGpaCRYJQlMbMoBha-NeY4fe7hQ1FhvajIkxCm9G9Fo1ZhcdlmGbcRM5qWn2hp3uny3eDI_tFhEHPloID-RNvyinvwYExvo5zuTn3QEVxRF3JEyNiBVt57rJ8A7N2ghoFARquGk5ZW2SjU2YvnIhpi47mJ3wjVNpV0AZ3heB7PXsBBV08nWqUUaLh9fllT9Gg6v9f2tyAMBXy96VvWLvkSCg3vG9mhvQ2JKGH6SeCF9Zr0gXRldGqSP7c" />
+                                            <div
+                                                class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <span class="material-symbols-outlined text-white"
+                                                    data-icon="edit">edit</span>
+                                            </div>
+                                        </div>
+                                        <span
+                                            class="material-symbols-outlined text-on-surface-variant text-[32px] mb-2 group-hover:text-primary transition-colors"
+                                            data-icon="cloud_upload">cloud_upload</span>
+                                        <p class="font-label-sm text-label-sm text-primary mb-1">Klik untuk mengganti
+                                            foto</p>
+                                        <p class="font-body-md text-[12px] text-on-surface-variant">SVG, PNG, JPG atau
+                                            GIF (Maks. 800x800px)</p>
+                                        <input accept="image/*" class="hidden" type="file" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Action Buttons -->
+                    <div
+                        class="flex items-center justify-end gap-stack-md pt-stack-sm mt-stack-sm border-t border-surface-variant pb-stack-lg">
+                        <button
+                            class="px-6 py-2.5 rounded-lg border border-outline font-label-sm text-label-sm text-on-surface hover:bg-surface-container transition-colors active:scale-95 duration-200"
+                            type="button">
+                            Batal
+                        </button>
+                        <button
+                            class="px-6 py-2.5 rounded-lg bg-primary hover:bg-primary/90 font-label-sm text-label-sm text-on-primary shadow-sm hover:shadow transition-all active:scale-95 duration-200 flex items-center gap-2"
+                            type="submit">
+                            <span class="material-symbols-outlined text-[18px]" data-icon="save">save</span>
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('block'));
+
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('border-primary', 'text-primary', 'bg-primary/10');
+                el.classList.add('border-transparent', 'text-on-surface-variant', 'hover:bg-surface-container', 'hover:text-on-surface');
+            });
+
+            const activeContent = document.getElementById(tabId);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+                activeContent.classList.add('block');
+            }
+
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-transparent', 'text-on-surface-variant', 'hover:bg-surface-container', 'hover:text-on-surface');
+                activeBtn.classList.add('border-primary', 'text-primary', 'bg-primary/10');
+            }
+        }
+    </script>
+</body>
+
+</html>

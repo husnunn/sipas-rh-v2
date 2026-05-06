@@ -13,7 +13,11 @@ class StudentProfileController extends Controller
     public function me(Request $request): StudentProfileResource
     {
         $user = $request->user();
-        $user->load('studentProfile.activeClass');
+        $user->load([
+            'studentProfile.activeClass.homeroomTeacher',
+            'studentProfile.extension',
+            'studentProfile.parents',
+        ]);
 
         if (! $user->studentProfile) {
             abort(404, 'Profil siswa belum dibuat.');

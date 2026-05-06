@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\StudentParentRelation;
 use App\Http\Controllers\Concerns\HandlesAdminDeletes;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ImportStudentsRequest;
@@ -11,18 +12,25 @@ use App\Models\AttendanceSite;
 use App\Models\ClassRoom;
 use App\Models\DailyAttendance;
 use App\Models\SchoolYear;
+use App\Models\StudentParent;
 use App\Models\StudentProfile;
+use App\Models\StudentProfileExtension;
 use App\Models\User;
 use App\Services\Attendance\SchoolAttendanceTime;
 use App\Services\Attendance\StudentDayFinalStatusService;
 use App\Services\Students\StudentExcelImporter;
+use App\Services\Wilayah\WilayahAddressSnapshot;
+use App\Support\MonthlyIncomeBands;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Throwable;
@@ -179,6 +187,7 @@ class StudentController extends Controller
             'student' => null,
             'classes' => ClassRoom::active()->orderBy('name')->get(),
             'schoolYears' => SchoolYear::orderByDesc('id')->get(),
+            'incomeBandOptions' => MonthlyIncomeBands::options(),
         ]);
     }
 
@@ -200,9 +209,10 @@ class StudentController extends Controller
             'parent_phone' => ['nullable', 'string', 'max:20'],
             'class_id' => ['nullable', 'exists:classes,id'],
             'school_year_id' => ['nullable', 'exists:school_years,id'],
+            ...$this->studentExtensionValidationRules(),
         ]);
 
-        DB::transaction(function () use ($validated): void {
+        DB::transaction(function () use ($validated, $request): void {
             $user = User::create([
                 'name' => $validated['name'],
                 'username' => $validated['username'],
@@ -231,6 +241,9 @@ class StudentController extends Controller
                     'is_active' => true,
                 ]);
             }
+
+            $this->syncStudentExtensionFromRequest($student, $request, $validated);
+            $this->syncStudentParentsFromValidated($student, $validated);
         });
 
         return redirect()->route('admin.students.index')
@@ -324,13 +337,14 @@ class StudentController extends Controller
 
     public function edit(StudentProfile $student): Response
     {
-        $student->load(['user', 'classes']);
+        $student->load(['user', 'classes', 'extension', 'parents']);
 
         return Inertia::render('Admin/Students/Form', [
             'mode' => 'edit',
             'student' => $student,
             'classes' => ClassRoom::active()->orderBy('name')->get(),
             'schoolYears' => SchoolYear::orderByDesc('id')->get(),
+            'incomeBandOptions' => MonthlyIncomeBands::options(),
         ]);
     }
 
@@ -352,9 +366,10 @@ class StudentController extends Controller
             'parent_phone' => ['nullable', 'string', 'max:20'],
             'class_id' => ['nullable', 'exists:classes,id'],
             'school_year_id' => ['nullable', 'exists:school_years,id'],
+            ...$this->studentExtensionValidationRules(),
         ]);
 
-        DB::transaction(function () use ($student, $validated): void {
+        DB::transaction(function () use ($student, $validated, $request): void {
             $student->user->update([
                 'name' => $validated['name'],
                 'username' => $validated['username'],
@@ -383,10 +398,135 @@ class StudentController extends Controller
                     ],
                 ]);
             }
+
+            $this->syncStudentExtensionFromRequest($student, $request, $validated);
+            $this->syncStudentParentsFromValidated($student, $validated);
         });
 
         return redirect()->route('admin.students.index')
             ->with('flash', ['type' => 'success', 'message' => 'Data siswa berhasil diperbarui.']);
+    }
+
+    /**
+     * @return array<string, array<int, mixed|string|\Closure>>
+     */
+    private function studentExtensionValidationRules(): array
+    {
+        return [
+            'profile_photo' => ['nullable', 'image', 'max:5120'],
+            'remove_profile_photo' => ['sometimes', 'boolean'],
+            'street_address' => ['nullable', 'string', 'max:2000'],
+            'rt' => ['nullable', 'string', 'max:10'],
+            'rw' => ['nullable', 'string', 'max:10'],
+            'village' => ['nullable', 'string', 'max:120'],
+            'district' => ['nullable', 'string', 'max:120'],
+            'city' => ['nullable', 'string', 'max:120'],
+            'province' => ['nullable', 'string', 'max:120'],
+            'postal_code' => ['nullable', 'string', 'max:10'],
+            'wilayah_village_id' => ['nullable', 'string', 'size:10', 'exists:villages,id'],
+            'religion' => ['nullable', 'string', 'max:50'],
+            'blood_type' => ['nullable', 'string', 'max:5'],
+            'mother_full_name' => ['nullable', 'string', 'max:150'],
+            'mother_occupation' => ['nullable', 'string', 'max:150'],
+            'mother_monthly_income_band' => ['nullable', 'string', Rule::in(MonthlyIncomeBands::values())],
+            'mother_nik' => ['nullable', 'digits:16'],
+            'mother_birth_date' => ['nullable', 'date'],
+            'father_full_name' => ['nullable', 'string', 'max:150'],
+            'father_occupation' => ['nullable', 'string', 'max:150'],
+            'father_monthly_income_band' => ['nullable', 'string', Rule::in(MonthlyIncomeBands::values())],
+            'father_nik' => ['nullable', 'digits:16'],
+            'father_birth_date' => ['nullable', 'date'],
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function syncStudentExtensionFromRequest(StudentProfile $student, Request $request, array $validated): void
+    {
+        $extension = StudentProfileExtension::query()->firstOrNew(['student_profile_id' => $student->id]);
+        $data = Arr::only($validated, [
+            'street_address',
+            'rt',
+            'rw',
+            'village',
+            'district',
+            'city',
+            'province',
+            'postal_code',
+            'religion',
+            'blood_type',
+        ]);
+
+        $wilayahVillageId = $validated['wilayah_village_id'] ?? null;
+        if (is_string($wilayahVillageId) && $wilayahVillageId !== '') {
+            $snapshot = WilayahAddressSnapshot::fromVillageId($wilayahVillageId);
+            if ($snapshot !== null) {
+                $data = array_merge($data, $snapshot);
+            }
+        } else {
+            $data['wilayah_village_id'] = null;
+        }
+
+        $extension->fill($data);
+
+        $remove = filter_var($validated['remove_profile_photo'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        if ($request->hasFile('profile_photo')) {
+            $uploaded = $request->file('profile_photo');
+            \assert($uploaded !== null && $uploaded->isValid());
+
+            if ($extension->profile_photo_path !== null && $extension->profile_photo_path !== '' && Storage::disk('public')->exists($extension->profile_photo_path)) {
+                Storage::disk('public')->delete($extension->profile_photo_path);
+            }
+
+            $extension->profile_photo_path = $uploaded->store('student-profile-extensions/'.$student->id, 'public');
+        } elseif ($remove && ($extension->profile_photo_path !== null && $extension->profile_photo_path !== '')) {
+            if (Storage::disk('public')->exists($extension->profile_photo_path)) {
+                Storage::disk('public')->delete($extension->profile_photo_path);
+            }
+            $extension->profile_photo_path = null;
+        }
+
+        $extension->save();
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function syncStudentParentsFromValidated(StudentProfile $student, array $validated): void
+    {
+        foreach (StudentParentRelation::cases() as $relation) {
+            $prefix = $relation === StudentParentRelation::Mother ? 'mother_' : 'father_';
+
+            $payload = [
+                'full_name' => $validated[$prefix.'full_name'] ?? null,
+                'occupation' => $validated[$prefix.'occupation'] ?? null,
+                'monthly_income_band' => $validated[$prefix.'monthly_income_band'] ?? null,
+                'nik' => $validated[$prefix.'nik'] ?? null,
+                'birth_date' => $validated[$prefix.'birth_date'] ?? null,
+            ];
+
+            $hasAnyData = Collection::make($payload)
+                ->contains(static fn ($value): bool => $value !== null && $value !== '');
+
+            if (! $hasAnyData) {
+                StudentParent::query()
+                    ->where('student_profile_id', $student->id)
+                    ->where('relation', $relation->value)
+                    ->delete();
+
+                continue;
+            }
+
+            StudentParent::query()->updateOrCreate(
+                [
+                    'student_profile_id' => $student->id,
+                    'relation' => $relation->value,
+                ],
+                $payload,
+            );
+        }
     }
 
     public function destroy(StudentProfile $student): RedirectResponse
