@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Mobile\MobileDeviceTokenController;
 use App\Http\Controllers\Api\Mobile\MobileProfileController;
 use App\Http\Controllers\Api\Student\StudentAttendanceController;
 use App\Http\Controllers\Api\Student\StudentAuthController;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('mobile')->middleware(['auth:sanctum', 'mobile_profile'])->group(function () {
+    Route::post('/device-token', [MobileDeviceTokenController::class, 'store']);
     Route::get('/profile', [MobileProfileController::class, 'show']);
     Route::post('/profile/photo', [MobileProfileController::class, 'updatePhoto']);
     Route::post('/profile/password', [MobileProfileController::class, 'updatePassword']);

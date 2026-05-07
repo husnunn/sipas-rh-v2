@@ -1,0 +1,2 @@
+INSERT INTO smks9777_sipasv1.student_profile_extensions (student_profile_id,profile_photo_path,street_address,rt,rw,village,district,city,province,postal_code,wilayah_village_id,religion,blood_type,created_at,updated_at) VALUES
+	 (180,'student-profile-extensions/180/sKnORqEECfTHjeFWc5ujES54Bz5H5szxrUmQ3nW2.png',NULL,NULL,NULL,'TROWULAN','TROWULAN','KABUPATEN MOJOKERTO','JAWA TIMUR',NULL,'3516120009',NULL,NULL,'2026-05-06 06:16:57','2026-05-06 06:19:30');

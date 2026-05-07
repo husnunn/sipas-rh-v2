@@ -93,6 +93,16 @@ class User extends Authenticatable
         return $this->hasMany(AttendanceDayOverride::class, 'updated_by');
     }
 
+    public function deviceTokens(): HasMany
+    {
+        return $this->hasMany(UserDeviceToken::class);
+    }
+
+    public function scheduleNotificationLogs(): HasMany
+    {
+        return $this->hasMany(ScheduleNotificationLog::class, 'recipient_id');
+    }
+
     // --- Scopes ---
 
     public function scopeActive(Builder $query): Builder
