@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"  @class(['dark' => ($appearance ?? 'system') == 'dark'])>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta property="og:title" content="SMK Robithotul Hikmah">
+        <meta property="og:description" content="Website resmi SMK Robithotul Hikmah.">
+        <meta property="og:image" content="{{ asset('logo_new.png') }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:type" content="website">
+
 
         {{-- Inline script to detect system dark mode preference and apply it immediately --}}
         <script>
@@ -30,9 +37,9 @@
             }
         </style>
 
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" href="/logo_new.png">
+<link rel="shortcut icon" type="image/png" href="/logo_new.png">
+<link rel="apple-touch-icon" href="/logo_new.png">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

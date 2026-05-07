@@ -25,7 +25,46 @@ const currentDate = computed(() => {
 </script>
 
 <template>
-    <Head title="Dashboard Overview" />
+        <Head>
+        <title>Dashboard Overview</title>
+
+        <meta
+            head-key="description"
+            name="description"
+            content="Dashboard sekolah untuk melihat data siswa, guru, kelas, mata pelajaran, dan jadwal aktif hari ini."
+        />
+
+        <meta
+            head-key="og:title"
+            property="og:title"
+            content="Dashboard Overview"
+        />
+
+        <meta
+            head-key="og:description"
+            property="og:description"
+            content="Dashboard sekolah untuk melihat data siswa, guru, kelas, mata pelajaran, dan jadwal aktif hari ini."
+        />
+
+        <meta
+            head-key="og:image"
+            property="og:image"
+            content="https://smkrobithotulhikmah.my.id/logo_new.png"
+        />
+
+        <meta
+            head-key="og:url"
+            property="og:url"
+            content="https://smkrobithotulhikmah.my.id"
+        />
+
+        <meta
+            head-key="og:type"
+            property="og:type"
+            content="website"
+        />
+    </Head>
+
 
     <div class="flex justify-between items-end mb-8">
         <div>
