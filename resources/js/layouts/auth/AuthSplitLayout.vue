@@ -4,7 +4,7 @@ import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';
 
 const page = usePage();
-const name = page.props.name;
+const name = page.props.appName;
 
 defineProps<{
     title?: string;

@@ -49,11 +49,13 @@ class SendPushNotificationJob implements ShouldQueue
             return;
         }
 
+        $anySuccess = false;
         $lastError = null;
 
         foreach ($deviceTokens as $token) {
             try {
                 $sender->sendToToken($token, $this->title, $this->body, $this->payload);
+                $anySuccess = true;
             } catch (Throwable $exception) {
                 $lastError = $exception->getMessage();
 
@@ -66,26 +68,33 @@ class SendPushNotificationJob implements ShouldQueue
             }
         }
 
-        if ($lastError !== null) {
+        if ($anySuccess) {
             $log->update([
-                'status' => 'failed',
-                'error_message' => $lastError,
+                'status' => 'sent',
+                'sent_at' => now(),
+                'error_message' => null,
             ]);
 
             return;
         }
 
-        $log->update([
-            'status' => 'sent',
-            'sent_at' => now(),
-            'error_message' => null,
-        ]);
+        if ($lastError !== null) {
+            $log->update([
+                'status' => 'failed',
+                'error_message' => $lastError,
+            ]);
+        }
     }
 
     private function isInvalidTokenError(string $errorMessage): bool
     {
+        $lower = strtolower($errorMessage);
+
         return str_contains($errorMessage, 'InvalidRegistration')
             || str_contains($errorMessage, 'NotRegistered')
-            || str_contains($errorMessage, 'registration-token-not-registered');
+            || str_contains($errorMessage, 'registration-token-not-registered')
+            || str_contains($lower, 'unregistered')
+            || str_contains($lower, 'not_found')
+            || str_contains($lower, 'requested entity was not found');
     }
 }

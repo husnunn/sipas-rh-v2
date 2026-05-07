@@ -72,7 +72,7 @@ class TeacherController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:150'],
+            'account_name' => ['required', 'string', 'max:150'],
             'username' => ['required', 'string', 'max:50', 'unique:users,username'],
             'email' => ['nullable', 'email', 'max:255', 'unique:users,email'],
             'password' => ['nullable', 'string', 'min:6'],
@@ -98,7 +98,7 @@ class TeacherController extends Controller
 
         DB::transaction(function () use ($validated, $request): void {
             $user = User::create([
-                'name' => $validated['name'],
+                'name' => $validated['account_name'],
                 'username' => $validated['username'],
                 'email' => $validated['email'] ?? null,
                 'password' => Hash::make($validated['password'] ?? ($validated['nip'] ?? $validated['username'])),
@@ -108,7 +108,7 @@ class TeacherController extends Controller
             $teacher = TeacherProfile::create([
                 'user_id' => $user->id,
                 'nip' => $validated['nip'] ?? null,
-                'full_name' => $validated['name'],
+                'full_name' => $validated['account_name'],
                 'gender' => $validated['gender'] ?? null,
                 'phone' => $validated['phone'] ?? null,
                 'address' => $validated['address'] ?? null,
@@ -146,7 +146,7 @@ class TeacherController extends Controller
     public function update(Request $request, TeacherProfile $teacher): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:150'],
+            'account_name' => ['required', 'string', 'max:150'],
             'username' => ['required', 'string', 'max:50', 'unique:users,username,'.$teacher->user_id],
             'email' => ['nullable', 'email', 'max:255', 'unique:users,email,'.$teacher->user_id],
             'password' => ['nullable', 'string', 'min:6'],
@@ -173,7 +173,7 @@ class TeacherController extends Controller
 
         DB::transaction(function () use ($teacher, $validated, $request): void {
             $teacher->user->update([
-                'name' => $validated['name'],
+                'name' => $validated['account_name'],
                 'username' => $validated['username'],
                 'email' => $validated['email'] ?? null,
                 ...(! empty($validated['password']) ? ['password' => Hash::make($validated['password'])] : []),
@@ -181,7 +181,7 @@ class TeacherController extends Controller
 
             $teacher->update([
                 'nip' => $validated['nip'] ?? null,
-                'full_name' => $validated['name'],
+                'full_name' => $validated['account_name'],
                 'gender' => $validated['gender'] ?? null,
                 'phone' => $validated['phone'] ?? null,
                 'address' => $validated['address'] ?? null,

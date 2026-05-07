@@ -19,7 +19,8 @@ const activeTab = ref<'utama' | 'tambahan'>('utama');
 const ext = computed(() => props.teacher?.extension);
 
 const form = useForm({
-    name: props.teacher?.user?.name ?? props.teacher?.full_name ?? '',
+    // "name" is reserved in Inertia shared props (was app title) and can prevent the user name from being submitted; use account_name.
+    account_name: props.teacher?.user?.name ?? props.teacher?.full_name ?? '',
     username: props.teacher?.user?.username ?? '',
     email: props.teacher?.user?.email ?? '',
     password: '',
@@ -32,10 +33,10 @@ const form = useForm({
     street_address: ext.value?.street_address ?? '',
     rt: ext.value?.rt ?? '',
     rw: ext.value?.rw ?? '',
-    village: ext.value?.village ?? '',
-    district: ext.value?.district ?? '',
-    city: ext.value?.city ?? '',
     province: ext.value?.province ?? '',
+    city: ext.value?.city ?? '',
+    district: ext.value?.district ?? '',
+    village: ext.value?.village ?? '',
     wilayah_village_id: ext.value?.wilayah_village_id ?? '',
     postal_code: ext.value?.postal_code ?? '',
     religion: ext.value?.religion ?? '',
@@ -137,17 +138,23 @@ onBeforeUnmount(() => {
     }
 });
 
-const submitOptions = { forceFormData: true };
-
+/**
+ * Inertia only serializes keys that exist on the initial form object (`defaults`).
+ * Only use multipart when a new file is selected — otherwise send JSON so all fields
+ * reliably reach Laravel (some PHP/host setups mishandle multipart PUT).
+ */
 const submit = () => {
+    const needsMultipart = form.profile_photo instanceof File;
+    const options = needsMultipart ? { forceFormData: true } : {};
+
     if (props.mode === 'create') {
-        form.post(store().url, submitOptions);
+        form.post(store().url, options);
 
         return;
     }
 
     if (props.teacher) {
-        form.put(update(props.teacher).url, submitOptions);
+        form.put(update(props.teacher).url, options);
     }
 };
 </script>
@@ -241,8 +248,8 @@ const submit = () => {
                         <div class="grid grid-cols-1 gap-stack-lg md:grid-cols-2">
                             <div>
                                 <label class="mb-stack-sm block font-label-sm text-label-sm text-on-surface">Nama Lengkap <span class="text-error">*</span></label>
-                                <input v-model="form.name" type="text" :class="[fieldBase, form.errors.name && 'border-red-500']" placeholder="Nama lengkap" />
-                                <span v-if="form.errors.name" class="mt-1 block text-xs text-red-500">{{ form.errors.name }}</span>
+                                <input v-model="form.account_name" type="text" :class="[fieldBase, form.errors.account_name && 'border-red-500']" placeholder="Nama lengkap" />
+                                <span v-if="form.errors.account_name" class="mt-1 block text-xs text-red-500">{{ form.errors.account_name }}</span>
                             </div>
                             <div>
                                 <label class="mb-stack-sm block font-label-sm text-label-sm text-on-surface">Username <span class="text-error">*</span></label>

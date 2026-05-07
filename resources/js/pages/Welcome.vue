@@ -125,7 +125,7 @@ const isAuthenticated = computed(() => !!page.props.auth?.user);
                                 <img
                                     alt="MUHAMMAD UBAID AL FARUQ, S.M."
                                     class="w-full h-full object-cover"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaPPSktrjCoGkYf12FgAvCocfN7O1hJXhWUG2MloOskd0-7Er4Huth_Gv49Hobx3En7z4A9wsvH9Bfw_mHEXfwGrfMGvymXCgNZpa8t0Zg90dYTUJWi3LRiobEWyj7FMoDJCJklsFJHGlkitRc_ScNoj5tmsECG9VY6XLOneQFz_htfZg8ra4bJUvRszQYv_uBjzAYm3WdXrJvd4Ua-41gEMqkMtFSgZIHUtxegW32ttZoGy0kfHeTniNzB0t74An9Ixg0LJ3vuDY"
+                                    src="https://smkrobithotulhikmah.my.id/foto_kepsek.jpeg"
                                 />
                             </div>
                         </div>

@@ -10,9 +10,9 @@ use App\Models\StudentProfile;
 use App\Models\Subject;
 use App\Models\TeacherProfile;
 use App\Models\UserDeviceToken;
+use App\Services\Notifications\FcmPushNotificationSender;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -26,20 +26,14 @@ class SendScheduleReminderNotificationsCommandTest extends TestCase
 
         Config::set('queue.default', 'sync');
         Config::set('app.school_timezone', 'Asia/Jakarta');
-        Config::set('services.fcm.server_key', 'test-fcm-key');
+        $this->mock(FcmPushNotificationSender::class, function ($mock) {
+            $mock->shouldReceive('sendToToken')->andReturn();
+        });
     }
 
     #[Test]
     public function it_sends_teacher_start_reminder_once_per_minute_window(): void
     {
-        Http::fake([
-            'https://fcm.googleapis.com/*' => Http::response([
-                'success' => 1,
-                'failure' => 0,
-                'results' => [['message_id' => 'msg-1']],
-            ], 200),
-        ]);
-
         $schoolYear = SchoolYear::factory()->active()->create();
         $subject = Subject::factory()->create(['name' => 'PJOK']);
         $classRoom = ClassRoom::factory()->recycle($schoolYear)->create();
@@ -82,14 +76,6 @@ class SendScheduleReminderNotificationsCommandTest extends TestCase
     #[Test]
     public function it_sends_students_only_for_first_schedule_of_the_day(): void
     {
-        Http::fake([
-            'https://fcm.googleapis.com/*' => Http::response([
-                'success' => 1,
-                'failure' => 0,
-                'results' => [['message_id' => 'msg-1']],
-            ], 200),
-        ]);
-
         $schoolYear = SchoolYear::factory()->active()->create();
         $subject = Subject::factory()->create(['name' => 'Matematika']);
         $teacher = TeacherProfile::factory()->create();

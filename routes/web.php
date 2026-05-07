@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AttendanceSiteController;
 use App\Http\Controllers\Admin\ClassRoomController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\SchoolYearController;
 use App\Http\Controllers\Admin\StudentAttendanceManualStatusController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
@@ -65,6 +66,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::delete('schedules/bulk-destroy', [ScheduleController::class, 'bulkDestroy'])
             ->name('schedules.bulk-destroy');
         Route::resource('schedules', ScheduleController::class);
+
+        // Tahun ajaran
+        Route::patch('school-years/{school_year}/set-active', [SchoolYearController::class, 'setActive'])
+            ->name('school-years.set-active');
+        Route::resource('school-years', SchoolYearController::class);
         Route::resource('attendance-sites', AttendanceSiteController::class);
         Route::patch('/attendance-sites/{attendanceSite}/toggle-active', [AttendanceSiteController::class, 'toggleActive'])
             ->name('attendance-sites.toggle-active');

@@ -16,7 +16,7 @@ declare module 'vite/client' {
 declare module '@inertiajs/core' {
     export interface InertiaConfig {
         sharedPageProps: {
-            name: string;
+            appName: string;
             auth: Auth;
             sidebarOpen: boolean;
             [key: string]: unknown;

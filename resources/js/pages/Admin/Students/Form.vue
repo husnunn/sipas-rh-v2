@@ -156,17 +156,18 @@ onBeforeUnmount(() => {
     }
 });
 
-const submitOptions = { forceFormData: true };
-
 const submit = () => {
+    const needsMultipart = form.profile_photo instanceof File;
+    const options = needsMultipart ? { forceFormData: true } : {};
+
     if (props.mode === 'create') {
-        form.post(store().url, submitOptions);
+        form.post(store().url, options);
 
         return;
     }
 
     if (props.student) {
-        form.put(update(props.student).url, submitOptions);
+        form.put(update(props.student).url, options);
     }
 };
 </script>

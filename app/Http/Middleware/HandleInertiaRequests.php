@@ -37,7 +37,8 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'name' => config('app.name'),
+            // Avoid key "name": it collides with common form fields (e.g. user display name) and shared props are merged onto page components.
+            'appName' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],

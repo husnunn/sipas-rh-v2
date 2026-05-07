@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\ClassRoom;
 use App\Models\SchoolYear;
 use App\Models\StudentProfile;
+use App\Models\StudentProfileExtension;
 use App\Models\TeacherProfile;
+use App\Models\TeacherProfileExtension;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -101,7 +103,7 @@ class MobileProfileApiTest extends TestCase
         Storage::fake('public');
 
         $student = User::factory()->student()->create();
-        StudentProfile::factory()->create(['user_id' => $student->id, 'photo' => null]);
+        $profile = StudentProfile::factory()->create(['user_id' => $student->id, 'photo' => null]);
         Sanctum::actingAs($student);
 
         $file = UploadedFile::fake()->image('avatar.jpg', 100, 100);
@@ -121,9 +123,73 @@ class MobileProfileApiTest extends TestCase
         $this->assertStringContainsString('/storage/', $url);
 
         $student->refresh();
-        $path = $student->studentProfile?->photo;
+        $path = StudentProfileExtension::query()
+            ->where('student_profile_id', $profile->id)
+            ->value('profile_photo_path');
         $this->assertNotNull($path);
         Storage::disk('public')->assertExists($path);
+    }
+
+    #[Test]
+    public function test_student_photo_update_deletes_old_file_and_uses_extension_path(): void
+    {
+        Storage::fake('public');
+
+        $student = User::factory()->student()->create();
+        $profile = StudentProfile::factory()->create([
+            'user_id' => $student->id,
+            'photo' => 'profile-photos/legacy-student.jpg',
+        ]);
+        Storage::disk('public')->put('profile-photos/legacy-student.jpg', 'old');
+
+        Sanctum::actingAs($student);
+
+        $response = $this->post('/api/mobile/profile/photo', [
+            'photo' => UploadedFile::fake()->image('new-avatar.jpg', 100, 100),
+        ], ['Accept' => 'application/json']);
+
+        $response->assertOk();
+
+        $newPath = StudentProfileExtension::query()
+            ->where('student_profile_id', $profile->id)
+            ->value('profile_photo_path');
+
+        $this->assertIsString($newPath);
+        Storage::disk('public')->assertExists($newPath);
+        Storage::disk('public')->assertMissing('profile-photos/legacy-student.jpg');
+    }
+
+    #[Test]
+    public function test_teacher_mobile_photo_updates_same_extension_field_as_admin(): void
+    {
+        Storage::fake('public');
+
+        $teacher = User::factory()->teacher()->create();
+        $profile = TeacherProfile::factory()->create([
+            'user_id' => $teacher->id,
+            'photo' => 'profile-photos/legacy-teacher.jpg',
+        ]);
+        TeacherProfileExtension::query()->create([
+            'teacher_profile_id' => $profile->id,
+            'profile_photo_path' => 'teacher-profile-extensions/'.$profile->id.'/old.png',
+        ]);
+        Storage::disk('public')->put('teacher-profile-extensions/'.$profile->id.'/old.png', 'old');
+
+        Sanctum::actingAs($teacher);
+
+        $response = $this->post('/api/mobile/profile/photo', [
+            'photo' => UploadedFile::fake()->image('teacher-new.jpg', 100, 100),
+        ], ['Accept' => 'application/json']);
+
+        $response->assertOk();
+
+        $newPath = TeacherProfileExtension::query()
+            ->where('teacher_profile_id', $profile->id)
+            ->value('profile_photo_path');
+
+        $this->assertIsString($newPath);
+        Storage::disk('public')->assertExists($newPath);
+        Storage::disk('public')->assertMissing('teacher-profile-extensions/'.$profile->id.'/old.png');
     }
 
     #[Test]

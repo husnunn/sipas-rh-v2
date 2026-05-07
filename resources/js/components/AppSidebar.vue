@@ -10,6 +10,7 @@ import { index as adminAttendanceSites } from '@/actions/App/Http/Controllers/Ad
 import { index as adminClasses } from '@/actions/App/Http/Controllers/Admin/ClassRoomController';
 import { index as adminDashboard } from '@/actions/App/Http/Controllers/Admin/DashboardController';
 import { index as adminSchedules } from '@/actions/App/Http/Controllers/Admin/ScheduleController';
+import { index as adminSchoolYears } from '@/actions/App/Http/Controllers/Admin/SchoolYearController';
 import { index as adminStudents } from '@/actions/App/Http/Controllers/Admin/StudentController';
 import { index as adminSubjects } from '@/actions/App/Http/Controllers/Admin/SubjectController';
 import { index as adminTeachers } from '@/actions/App/Http/Controllers/Admin/TeacherController';
@@ -88,6 +89,12 @@ const navGroups = computed((): SidebarGroup[] => {
                     href: adminSchedules().url,
                     icon: 'calendar_month',
                     active: page.url.startsWith(adminSchedules().url),
+                },
+                {
+                    title: 'Tahun ajaran',
+                    href: adminSchoolYears().url,
+                    icon: 'date_range',
+                    active: page.url.startsWith(adminSchoolYears().url),
                 },
             ],
         },

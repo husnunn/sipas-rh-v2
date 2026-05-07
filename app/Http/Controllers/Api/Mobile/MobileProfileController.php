@@ -7,6 +7,8 @@ use App\Http\Requests\Api\Mobile\UpdateMobileProfilePasswordRequest;
 use App\Http\Requests\Api\Mobile\UpdateMobileProfilePhotoRequest;
 use App\Models\ClassRoom;
 use App\Models\StudentParent;
+use App\Models\StudentProfileExtension;
+use App\Models\TeacherProfileExtension;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,28 +41,55 @@ class MobileProfileController extends Controller
         $user = $request->user();
         \assert($user instanceof User);
 
-        $profile = $user->isStudent()
-            ? $user->studentProfile
-            : $user->teacherProfile;
-
-        if ($profile === null) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Profil tidak ditemukan.',
-            ], 404);
-        }
-
         $file = $request->file('photo');
         \assert($file !== null);
 
         $directory = 'profile-photos/'.$user->id;
         $path = $file->store($directory, 'public');
 
-        if ($profile->photo !== null && $profile->photo !== $path && Storage::disk('public')->exists($profile->photo)) {
-            Storage::disk('public')->delete($profile->photo);
+        $oldPath = null;
+        if ($user->isStudent()) {
+            $profile = $user->studentProfile;
+            if ($profile === null) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Profil tidak ditemukan.',
+                ], 404);
+            }
+
+            $extension = StudentProfileExtension::query()->firstOrNew(['student_profile_id' => $profile->id]);
+            $oldPath = $extension->profile_photo_path ?: $profile->photo;
+            $extension->profile_photo_path = $path;
+            $extension->save();
+            if ($profile->photo !== null) {
+                $profile->update(['photo' => null]);
+            }
+        } elseif ($user->isTeacher()) {
+            $profile = $user->teacherProfile;
+            if ($profile === null) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Profil tidak ditemukan.',
+                ], 404);
+            }
+
+            $extension = TeacherProfileExtension::query()->firstOrNew(['teacher_profile_id' => $profile->id]);
+            $oldPath = $extension->profile_photo_path ?: $profile->photo;
+            $extension->profile_photo_path = $path;
+            $extension->save();
+            if ($profile->photo !== null) {
+                $profile->update(['photo' => null]);
+            }
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses untuk mengubah profil.',
+            ], 403);
         }
 
-        $profile->update(['photo' => $path]);
+        if ($oldPath !== null && $oldPath !== '' && $oldPath !== $path && Storage::disk('public')->exists($oldPath)) {
+            Storage::disk('public')->delete($oldPath);
+        }
 
         return response()->json([
             'success' => true,
@@ -124,7 +153,9 @@ class MobileProfileController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'role' => 'student',
-                'profile_photo_url' => $this->publicPhotoUrl($user->studentProfile->photo),
+                'profile_photo_url' => $this->publicPhotoUrl(
+                    $user->studentProfile->extension?->profile_photo_path ?? $user->studentProfile->photo
+                ),
                 'school' => $schoolPayload,
                 'class' => $classPayload,
                 'user' => $this->userPayload($user),
@@ -170,7 +201,9 @@ class MobileProfileController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'role' => 'teacher',
-                'profile_photo_url' => $this->publicPhotoUrl($user->teacherProfile->photo),
+                'profile_photo_url' => $this->publicPhotoUrl(
+                    $user->teacherProfile->extension?->profile_photo_path ?? $user->teacherProfile->photo
+                ),
                 'school' => $this->defaultSchoolPayload(),
                 'class' => null,
                 'user' => $this->userPayload($user),
